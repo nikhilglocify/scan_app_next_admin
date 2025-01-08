@@ -1,39 +1,39 @@
 "use client";
-import { getVideos } from "@/app/appApi/video";
+// import { getVideos } from "@/app/appApi/video";
 import Loader from "@/app/components/global/loader";
-import { VideoAttributes } from "@/app/db/models/video";
+// import { VideoAttributes } from "@/app/db/models/video";
 import { generateClientS3Url, generateS3Url } from "@/app/helpers/utils";
 import { tree } from "next/dist/build/templates/app-page";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-interface VideoListProps {
-  videos: VideoAttributes[];
-}
+// interface VideoListProps {
+//   videos: VideoAttributes[];
+// }
 
-const VideoList: React.FC<VideoListProps> = () => {
-  const [videos, setVideos] = useState<VideoAttributes[] | null>(null);
+const VideoList: React.FC = () => {
+  const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const fetchVideos = async () => {
-    try {
-      setLoading(true);
-      console.log("Loading videos");
-      const data = await getVideos();
+  // const fetchVideos = async () => {
+  //   try {
+  //     setLoading(true);
+  //     console.log("Loading videos");
+  //     // const data = await getVideos();
 
-      console.log("videos=>", data);
+  //     // console.log("videos=>", data);
 
-      setVideos(data.data);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (!videos) {
-      fetchVideos();
-    }
-  }, []);
+  //     // setVideos(data.data);
+  //   } catch (error) {
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (!videos) {
+  //     fetchVideos();
+  //   }
+  // }, []);
 
   if (loading) {
     return (
