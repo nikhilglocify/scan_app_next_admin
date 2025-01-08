@@ -11,17 +11,17 @@ export const navBarFields: MenuItem[] = [
     showDropdown: false,
   },
   {
-    name: "Videos", route: "/video/list", dropdownOptions: [
+    name: "Tips", route: "/tips/", dropdownOptions: [
 
 
     ], showDropdown: false
   },
-  {
-    name: "upload",
-    route: "/video/upload",
-    dropdownOptions: [],
-    showDropdown: false,
-  },
+  // {
+  //   name: "upload",
+  //   route: "/video/upload",
+  //   dropdownOptions: [],
+  //   showDropdown: false,
+  // },
   { name: "Logout", route: "#", dropdownOptions: [], showDropdown: false },
 ];
 

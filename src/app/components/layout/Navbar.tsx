@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white border-gray-200">
+    <nav className=" border-gray-200 bg-orange-600">
       <div className="container flex flex-wrap items-center justify-between px-6 py-3 mx-auto">
         <Link
           href={"/"}
@@ -86,7 +86,7 @@ const Navbar: React.FC = () => {
           }`}
           id="navbar-dropdown"
         >
-          <ul className="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+          <ul className="flex flex-col p-4 mt-4 font-medium  md:p-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
             {navBarMenu.map((navItem, idx) => (
               <>
                 <div key={navItem.route}>
@@ -113,7 +113,7 @@ const Navbar: React.FC = () => {
                       <button
                         id="dropdownNavbarLink"
                         data-dropdown-toggle="dropdownNavbar"
-                        className="flex items-center justify-between w-full px-3 py-2 text-gray-900 rounded hover:text-gray-500 md:border-0 md:p-0 md:w-auto "
+                        className="flex items-center justify-between w-full px-3 py-2 text-gray-900  hover:text-gray-500 md:border-0 md:p-0 md:w-auto "
                         onClick={
                           navItem.dropdownOptions &&
                           navItem.dropdownOptions.length > 0 &&

@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   jwt:{
-    maxAge: 60
+    // maxAge: 60
   },
   session: {
     strategy: 'jwt',
