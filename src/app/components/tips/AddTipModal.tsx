@@ -98,7 +98,7 @@ const AddTipModal = () => {
               <DatePicker
                 id="date"
                 selected={formData.date}
-                onChange={handleDateChange}
+                // onChange={handleDateChange}
                 dateFormat="yyyy-MM-dd"
                 className="w-full p-2 border rounded-md"
               />
