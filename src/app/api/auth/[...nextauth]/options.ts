@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       
       if (user) {
-        token._id = user._id?.toString(); // Convert ObjectId to string
+        // token._id = user._id?.toString(); // Convert ObjectId to string
   
         
       }
@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (token) {
-        session.user._id = token._id;
+        // session.user._id = token._id;
       }
       return session;
     },
