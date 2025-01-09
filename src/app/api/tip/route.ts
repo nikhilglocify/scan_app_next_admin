@@ -6,25 +6,24 @@ import { badRequest, successResponseWithData } from "@/app/helpers/apiResponses"
 import  connect  from '@/app/dbConfig/connect';
 import Tip from "@/app/models/tip"
 import { ReqBodyValidationresponse, validateBodyData } from "@/app/helpers/validation/requestBodyValiation";
-import { validationVideoSchema } from "@/app/schemas/tipSchema";
+import { tipSchema } from "@/app/schemas/tipSchema";
 
 
 
 export async function POST(request:NextRequest){
     try {
-        // Parse the incoming form data
+  
     const formData = await request.formData();
-    const formPayload = Object.fromEntries(formData);
+    let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
-    const video = formData.get("video");
 
-    const formValidationData: ReqBodyValidationresponse = validateBodyData(validationVideoSchema, formPayload);
+    const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
     if (!formValidationData.isValidated) {
       return badRequest(NextResponse, formValidationData.message, formValidationData.error);
     }
 
     // Check if valid files are received
-    if (!(image instanceof File) || !(video instanceof File)) {
+    if (!(image instanceof File)) {
       return badRequest(NextResponse, "No valid files received")
     }
     console.log("image", image)

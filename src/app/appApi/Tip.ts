@@ -2,7 +2,12 @@ import axios from "axios";
 
 export const addTip = async (data: any) => {
     try {
-        const response = await axios.post("/api/tip", data);
+        const response = await axios.post("/api/tip", data, {
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+            
+        });
         return response.data
 
     } catch (error) {

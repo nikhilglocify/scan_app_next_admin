@@ -16,32 +16,28 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller } from "react-hook-form";
 import { tipFormData, tipSchema } from "@/app/schemas/tipSchema";
+import { addTip } from "@/app/appApi/Tip";
+import toast from "react-hot-toast";
 
 const AddTipModal = () => {
-  // const [formData, setFormData] = useState({
-  //   description: "",
-  //   date: new Date(),
-  //   image: null as File | null,
-  // });
-
   const {
-    register,
-    formState: { errors, },
+    formState: { errors },
     control,
-    setValue,getValues,
+    setValue,
+    getValues,
     handleSubmit,
+    reset,
   } = useForm<tipFormData>({
     resolver: zodResolver(tipSchema),
-    defaultValues:{
-      date:new Date()
-    }
+    defaultValues: {
+      date: new Date(),
+    },
   });
 
   console.log("errors", errors);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // setFormData({ ...formData, [e.target.name]: e.target.value });
     setValue("description", e.target.value);
   };
 
@@ -52,17 +48,22 @@ const AddTipModal = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      // setFormData({ ...formData, image: file });
-      setValue("image", e.target.files);
+      setValue("image", e.target.files[0]);
       setImagePreview(URL.createObjectURL(file));
     }
   };
 
   const onSubmit = () => {
-   
-    // Add form submission logic here (e.g., API call)
-    const formData=getValues()
-     console.log("Form Data Submitted: ", formData);
+    try {
+      const formData = getValues();
+      console.log("Form Data Submitted: ", formData);
+      addTip(formData);
+      // reset();
+
+      toast.success("Tip added successfully");
+    } catch (error: any) {
+      toast.error(error.message || "something went wrong");
+    }
   };
 
   return (
@@ -93,18 +94,10 @@ const AddTipModal = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    // required
                   />
                 )}
               ></Controller>
-              {/* <Input
-                id="image"
-                name="image"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                required
-              /> */}
+
               {/* Image Preview */}
               {imagePreview && (
                 <div className="mt-2">
@@ -131,13 +124,12 @@ const AddTipModal = () => {
                 name="description"
                 render={({ field }) => (
                   <textarea
-                    
                     id="description"
                     name="description"
                     placeholder="Enter a description"
                     className="w-full p-2 border rounded-md"
                     rows={3}
-                    // value={formData.description}
+                    value={field.value}
                     onChange={handleChange}
                     // required
                   />
@@ -160,8 +152,7 @@ const AddTipModal = () => {
                 render={({ field }) => (
                   <DatePicker
                     id="date"
-                    
-                    selected={field.value??new Date()}
+                    selected={field.value ?? new Date()}
                     onChange={handleDateChange}
                     dateFormat="yyyy-MM-dd"
                     className="w-full p-2 border rounded-md"

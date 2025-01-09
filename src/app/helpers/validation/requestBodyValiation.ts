@@ -1,3 +1,4 @@
+import { error } from "console";
 
 
 
@@ -20,6 +21,8 @@ export const validateBodyData = (schema: Zod.Schema, body: any): ReqBodyValidati
 
                 result.error?.issues?.map((issue) => [issue.path[0], issue.message]) || []
             );
+
+        
 
             // Respond with a JSON object containing the validation errors
             return {
