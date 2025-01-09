@@ -5,6 +5,7 @@ export async function uploadFileToLocal(file: File, id: string) {
     const uploadDir = path.join(process.cwd(), "uploads");
     const fileName = `${id}_${file.name}`;
     const filePath = path.join(uploadDir, fileName);
+    const relativePath = path.join("uploads", fileName); 
   
     fs.mkdirSync(uploadDir, { recursive: true });
   
@@ -22,5 +23,5 @@ export async function uploadFileToLocal(file: File, id: string) {
     fileStream.end();
     console.log(`File uploaded locally to ${filePath}`);
   
-    return filePath; // Return the local file path
+    return relativePath; // Return the local file path
   }

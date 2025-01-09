@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
 
     const saveTip = await Tip.create(tipObj)
-    console.log("saveTip",saveTip,saveTip._id)
+    console.log("saveTip", saveTip, saveTip._id)
 
 
     const filePath = await uploadFileToLocal(image, saveTip._id)
@@ -49,6 +49,24 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.log("error", error.message)
     return badRequest(NextResponse, "error")
+
+  }
+
+}
+
+export async function GET(request: NextRequest) {
+
+  try {
+
+    const tips = await Tip.find()
+
+
+    return successResponseWithData(NextResponse, "successfully fetched Tips", tips)
+
+  } catch (error: any) {
+
+    return badRequest(NextRequest, error.message || "something went wrong")
+
 
   }
 
