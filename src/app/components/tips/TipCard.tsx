@@ -2,16 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
+import { TipModel } from "@/app/models/tip";
 
 type TipCardProps = {
-  image: string;
-  description: string;
-  date:Date,
+  tip:TipModel
   onEdit: () => void;
   onDelete: () => void;
 };
 
-const TipCard: React.FC<TipCardProps> = ({ image, description, onEdit, onDelete,date }) => {
+const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
   return (
     <Card className="relative h-[100%]">
       {/* Kebab Menu */}
@@ -26,10 +25,10 @@ const TipCard: React.FC<TipCardProps> = ({ image, description, onEdit, onDelete,
           <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
         </DropdownMenuContent> */}
       </DropdownMenu>
-        <h2>Date: {new Date(date).toDateString()}</h2>
+        <h2 className="py-2 px-3">Date: {new Date(tip.date).toDateString()}</h2>
       {/* Card Image */}
       <div className="aspect-w-16 aspect-h-9 overflow-hidden rounded-t-md">
-        <img src={image} alt="Card Image" className="w-[90%] h-[80%] object-contain" />
+        <img src={"https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"} alt="Card Image" className="w-[100%] h-[100%] object-contain" />
       </div>
 
       {/* Card Description */}
@@ -37,7 +36,7 @@ const TipCard: React.FC<TipCardProps> = ({ image, description, onEdit, onDelete,
         {/* <CardHeader>
           <CardTitle>Description</CardTitle>
         </CardHeader> */}
-        <p className="text-lg text-muted-foreground">{description}</p>
+        <p className="text-lg text-muted-foreground mt-4">{tip?.description}</p>
       </CardContent>
     </Card>
   );

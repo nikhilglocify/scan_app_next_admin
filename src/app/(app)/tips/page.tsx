@@ -9,50 +9,58 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-
 function page() {
   const router = useRouter();
   const [tipData, setTipData] = useState<TipModel[] | null>(null);
   const [loading, setLoading] = useState(true);
-const [fetchTips,setFetchTips]=useState(true)
+  const [fetchTips, setFetchTips] = useState(true);
+  const [isEdit,setIsEdit]=useState(false)
+  const [selectedTip,setSelectedTip]=useState<TipModel|null>(null)
   const fetchDailyTip = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const data = await getTips();
 
       setTipData(data?.data);
     } catch (error) {
     } finally {
-      setTimeout(()=>{
+      setTimeout(() => {
         setLoading(false);
-      },500)
-     
+      }, 500);
     }
   };
   useEffect(() => {
     fetchDailyTip();
   }, [fetchTips]);
 
+  // const handleEdit=(tip:TipModel)=>{
+
+  // }
+
   if (loading) {
-    return <Loader color="black" isFullScreen={true} message="Fetching tips .." />;
+    return (
+      <Loader color="black" isFullScreen={true} message="Fetching tips .." />
+    );
   }
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold text-center mb-8">Tips List</h1>
       {/* <Button>Add Tip</Button>
        */}
-      <AddTipModal setFetchTips={setFetchTips} fetchTips={fetchTips}></AddTipModal>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <AddTipModal
+      isEdit={isEdit}
+        setFetchTips={setFetchTips}
+        fetchTips={fetchTips}
+      ></AddTipModal>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {tipData &&
           tipData.length &&
           tipData.map((tip: TipModel, idx) => (
             <TipCard
               key={idx}
-              image={"https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"}
-              description={tip.description}
               onDelete={() => console.log("delete")}
-              onEdit={() => console.log("edit")}
-              date={tip.date}
+              onEdit={(tip:TipModel) => console.log("edit")}
+              tip={tip}
             />
             // <div
             //   key={tip._id}
