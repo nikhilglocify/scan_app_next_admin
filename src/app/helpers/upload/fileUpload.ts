@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-async function uploadFileToLocal(file: File, id: string) {
+export async function uploadFileToLocal(file: File, id: string) {
     const uploadDir = path.join(process.cwd(), "uploads");
     const fileName = `${id}_${file.name}`;
     const filePath = path.join(uploadDir, fileName);

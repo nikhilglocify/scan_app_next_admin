@@ -1,6 +1,15 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, Model, model } from "mongoose";
 
-const userSchema = new mongoose.Schema({
+
+export interface UserModel {
+    email:string,
+    password:string,
+    token?:string,
+    isDeleted?:boolean
+
+
+}
+const userSchema : Schema<UserModel> = new Schema({
     email: {
         type: String,
         required: true,
@@ -20,6 +29,6 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-const User = mongoose.models.users || mongoose.model("users", userSchema);
+const User :Model<UserModel> = mongoose.models.users || mongoose.model("users", userSchema);
 
 export default User;
