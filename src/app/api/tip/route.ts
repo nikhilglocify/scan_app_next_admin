@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
 
   try {
 
-    const tips = await Tip.find()
+    const tips = await Tip.find().sort({ date: 'desc' }) 
 
 
     return successResponseWithData(NextResponse, "successfully fetched Tips", tips)

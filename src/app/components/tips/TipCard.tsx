@@ -6,13 +6,14 @@ import { MoreVertical } from "lucide-react";
 type TipCardProps = {
   image: string;
   description: string;
+  date:Date,
   onEdit: () => void;
   onDelete: () => void;
 };
 
-const TipCard: React.FC<TipCardProps> = ({ image, description, onEdit, onDelete }) => {
+const TipCard: React.FC<TipCardProps> = ({ image, description, onEdit, onDelete,date }) => {
   return (
-    <Card className="relative">
+    <Card className="relative h-[100%]">
       {/* Kebab Menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -20,23 +21,23 @@ const TipCard: React.FC<TipCardProps> = ({ image, description, onEdit, onDelete 
             <MoreVertical className="h-5 w-5" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        {/* <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={onEdit}>Edit</DropdownMenuItem>
           <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
-        </DropdownMenuContent>
+        </DropdownMenuContent> */}
       </DropdownMenu>
-
+        <h2>Date: {new Date(date).toDateString()}</h2>
       {/* Card Image */}
       <div className="aspect-w-16 aspect-h-9 overflow-hidden rounded-t-md">
-        <img src={image} alt="Card Image" className="w-full h-full object-cover" />
+        <img src={image} alt="Card Image" className="w-[90%] h-[80%] object-contain" />
       </div>
 
       {/* Card Description */}
       <CardContent>
-        <CardHeader>
+        {/* <CardHeader>
           <CardTitle>Description</CardTitle>
-        </CardHeader>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        </CardHeader> */}
+        <p className="text-lg text-muted-foreground">{description}</p>
       </CardContent>
     </Card>
   );

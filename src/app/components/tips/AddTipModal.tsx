@@ -19,7 +19,16 @@ import { tipFormData, tipSchema } from "@/app/schemas/tipSchema";
 import { addTip } from "@/app/appApi/Tip";
 import toast from "react-hot-toast";
 
-const AddTipModal = () => {
+type AddTipModalProps ={
+  setFetchTips:any,
+  fetchTips:any
+
+
+
+}
+
+const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
+  const [open, setOpen] = useState(false);
   const {
     formState: { errors },
     control,
@@ -53,11 +62,13 @@ const AddTipModal = () => {
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit =async () => {
     try {
       const formData = getValues();
       console.log("Form Data Submitted: ", formData);
-      addTip(formData);
+      await addTip(formData);
+      setFetchTips(!fetchTips)
+      setOpen(false)
       // reset();
 
       toast.success("Tip added successfully");
@@ -69,7 +80,7 @@ const AddTipModal = () => {
   return (
     <div>
       {/* Trigger to Open Modal */}
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button>Add Tip</Button>
         </DialogTrigger>

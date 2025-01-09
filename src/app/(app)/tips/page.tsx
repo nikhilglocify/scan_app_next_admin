@@ -1,42 +1,59 @@
-"use client"
-import AddTipModal from '@/app/components/tips/AddTipModal'
-import TipCard from '@/app/components/tips/TipCard'
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+"use client";
+import { getTips } from "@/app/appApi/Tip";
+import Loader from "@/app/components/global/loader";
+import AddTipModal from "@/app/components/tips/AddTipModal";
+import TipCard from "@/app/components/tips/TipCard";
+import { TipModel } from "@/app/models/tip";
+import { Button } from "@/components/ui/button";
 
-const tips=[
-    {   
-        _id:"adad",
-        description:'sdfsdfsdfsf',
-        date: new Date(),
-        
-    },
-    { _id:"adsdfad",
-        description:'sdfsdfsdfsf',
-        date: new Date(),
-        
-    },{ _id:"adewad",
-        description:'sdfsdfsdfsf',
-        date: new Date(),
-        
-    }
-]
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
 
 function page() {
-    const router=useRouter()
+  const router = useRouter();
+  const [tipData, setTipData] = useState<TipModel[] | null>(null);
+  const [loading, setLoading] = useState(true);
+const [fetchTips,setFetchTips]=useState(true)
+  const fetchDailyTip = async () => {
+    try {
+      setLoading(true)
+      const data = await getTips();
+
+      setTipData(data?.data);
+    } catch (error) {
+    } finally {
+      setTimeout(()=>{
+        setLoading(false);
+      },500)
+     
+    }
+  };
+  useEffect(() => {
+    fetchDailyTip();
+  }, [fetchTips]);
+
+  if (loading) {
+    return <Loader color="black" isFullScreen={true} message="Fetching tips .." />;
+  }
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-
       <h1 className="text-3xl font-bold text-center mb-8">Tips List</h1>
       {/* <Button>Add Tip</Button>
        */}
-       <AddTipModal></AddTipModal>
+      <AddTipModal setFetchTips={setFetchTips} fetchTips={fetchTips}></AddTipModal>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tips &&
-          tips.length &&
-          tips.map((tip:any,idx) => (
-            <TipCard  key={idx}  image={"https://i.sstatic.net/l60Hf.png"} description={tip.description} onDelete={()=>console.log("delete")} onEdit={()=>console.log("edit")} />
+        {tipData &&
+          tipData.length &&
+          tipData.map((tip: TipModel, idx) => (
+            <TipCard
+              key={idx}
+              image={"https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"}
+              description={tip.description}
+              onDelete={() => console.log("delete")}
+              onEdit={() => console.log("edit")}
+              date={tip.date}
+            />
             // <div
             //   key={tip._id}
             //   className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
@@ -81,7 +98,8 @@ function page() {
             // </div>
           ))}
       </div>
-    </div>)
+    </div>
+  );
 }
 
-export default page
+export default page;
