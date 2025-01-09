@@ -51,7 +51,7 @@ const SignInForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg space-y-6"
+      className="max-w-md mx-auto  my-auto  mt-[200px] p-6 bg-white rounded-lg shadow-lg space-y-6"
     >
       <h1 className="text-2xl font-bold text-center">Sign In</h1>
 
@@ -99,7 +99,7 @@ const SignInForm: React.FC = () => {
         type="submit"
         className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
-        {loading ? <Loader message={"signing in ...."} /> : "Sign In"}
+        {loading ? <Loader message={"Signing in ...."} /> : "Sign In"}
       </button>
 
       {/* Add the "Don't have an account" section */}

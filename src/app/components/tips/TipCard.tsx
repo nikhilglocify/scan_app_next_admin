@@ -6,7 +6,7 @@ import { TipModel } from "@/app/models/tip";
 
 type TipCardProps = {
   tip:TipModel
-  onEdit: () => void;
+  onEdit: (tip:TipModel) => void;
   onDelete: () => void;
 };
 
@@ -20,10 +20,10 @@ const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
             <MoreVertical className="h-5 w-5" />
           </Button>
         </DropdownMenuTrigger>
-        {/* <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={onEdit}>Edit</DropdownMenuItem>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={()=>onEdit(tip)}>Edit</DropdownMenuItem>
           <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
-        </DropdownMenuContent> */}
+        </DropdownMenuContent>
       </DropdownMenu>
         <h2 className="py-2 px-3">Date: {new Date(tip.date).toDateString()}</h2>
       {/* Card Image */}

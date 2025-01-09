@@ -43,12 +43,13 @@ const Navbar: React.FC = () => {
     // alert("logout")
     console.log("logout");
     await signOut();
+    
     // // router.push("/sign-in");
     // localStorage.setItem("userName", "");
   };
 
   return (
-    <nav className=" border-gray-200 bg-orange-600">
+    <nav className=" border-gray-200 bg-gray-200">
       <div className="container flex flex-wrap items-center justify-between px-6 py-3 mx-auto">
         <Link
           href={"/"}

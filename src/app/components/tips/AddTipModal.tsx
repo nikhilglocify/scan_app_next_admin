@@ -14,21 +14,28 @@ import {
 } from "@/components/ui/dialog";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFormContext } from "react-hook-form";
 import { tipFormData, tipSchema } from "@/app/schemas/tipSchema";
-import { addTip } from "@/app/appApi/Tip";
+import { addTip, editTip } from "@/app/appApi/Tip";
 import toast from "react-hot-toast";
 
-type AddTipModalProps ={
-  setFetchTips:any,
-  fetchTips:any
+type AddTipModalProps = {
+  setFetchTips: any;
+  fetchTips: any;
+  isEdit: boolean;
+  open: boolean;
+  setOpen: any;
+  setIsEdit: any;
+};
 
-
-
-}
-
-const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
-  const [open, setOpen] = useState(false);
+const AddTipModal: React.FC<AddTipModalProps> = ({
+  fetchTips,
+  setFetchTips,
+  isEdit,
+  open,
+  setOpen,
+  setIsEdit,
+}) => {
   const {
     formState: { errors },
     control,
@@ -36,12 +43,7 @@ const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
     getValues,
     handleSubmit,
     reset,
-  } = useForm<tipFormData>({
-    resolver: zodResolver(tipSchema),
-    defaultValues: {
-      date: new Date(),
-    },
-  });
+  } = useFormContext();
 
   console.log("errors", errors);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -62,16 +64,24 @@ const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
     }
   };
 
-  const onSubmit =async () => {
+  const onSubmit = async () => {
     try {
       const formData = getValues();
-      console.log("Form Data Submitted: ", formData);
-      await addTip(formData);
-      setFetchTips(!fetchTips)
-      setOpen(false)
-      // reset();
+      console.log("Form Data Submitted changes: ", formData);
 
-      toast.success("Tip added successfully");
+      if (isEdit) {
+        await editTip(formData);
+      } else {
+        await addTip(formData);
+      }
+
+      setFetchTips(!fetchTips);
+
+      reset();
+
+      toast.success(`Tip ${isEdit ? "edited" : "added"} successfully`);
+      setIsEdit(false);
+      setOpen(false);
     } catch (error: any) {
       toast.error(error.message || "something went wrong");
     }
@@ -81,12 +91,19 @@ const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
     <div>
       {/* Trigger to Open Modal */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button>Add Tip</Button>
+        <DialogTrigger asChild className="absolute right-2 top-20">
+          <Button
+            onClick={() => {
+              setIsEdit(false);
+              reset({});
+            }}
+          >
+            Add Tip
+          </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="mt-4">
           <DialogHeader>
-            <DialogTitle>Add New Tip</DialogTitle>
+            <DialogTitle>{isEdit ? "Edit Tip" : "Add New Tip"}</DialogTitle>
           </DialogHeader>
 
           {/* Form */}
@@ -108,9 +125,18 @@ const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
                   />
                 )}
               ></Controller>
-
-              {/* Image Preview */}
-              {imagePreview && (
+              {isEdit && !imagePreview && (
+                <div className="mt-2">
+                  <img
+                    src={
+                      "https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"
+                    }
+                    alt="Preview"
+                    className="w-full h-auto max-h-48 object-contain border rounded-md"
+                  />
+                </div>
+              )}
+              {imagePreview  && (
                 <div className="mt-2">
                   <img
                     src={imagePreview}
@@ -119,9 +145,24 @@ const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
                   />
                 </div>
               )}
+              {/* Image Preview */}
+              {/* {imagePreview ||
+                (isEdit && (
+                  <div className="mt-2">
+                    <img
+                      src={
+                         imagePreview
+                          ? imagePreview
+                          : "https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"
+                      }
+                      alt="Preview"
+                      className="w-full h-auto max-h-48 object-contain border rounded-md"
+                    />
+                  </div>
+                ))} */}
               {errors.image && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.image.message}
+                  {errors.image.message as any}
                 </p>
               )}
             </div>
@@ -149,7 +190,7 @@ const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
 
               {errors.description && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.description.message}
+                  {errors?.description?.message as any}
                 </p>
               )}
             </div>
@@ -172,16 +213,18 @@ const AddTipModal :React.FC<AddTipModalProps> = ({fetchTips,setFetchTips}) => {
               ></Controller>
               {errors.date && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.date.message}
+                  {errors.date.message as any}
                 </p>
               )}
             </div>
 
             {/* Footer Buttons */}
             <DialogFooter>
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Save</Button>
               <DialogTrigger asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button onClick={() => setIsEdit(false)} variant="outline">
+                  Cancel
+                </Button>
               </DialogTrigger>
             </DialogFooter>
           </form>
