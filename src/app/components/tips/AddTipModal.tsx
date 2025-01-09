@@ -2,37 +2,67 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useForm, Controller } from "react-hook-form";
+import { tipFormData, tipSchema } from "@/app/schemas/tipSchema";
 
 const AddTipModal = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    description: "",
-    date: new Date(),
-    image: null as File | null,
+  // const [formData, setFormData] = useState({
+  //   description: "",
+  //   date: new Date(),
+  //   image: null as File | null,
+  // });
+
+  const {
+    register,
+    formState: { errors, },
+    control,
+    setValue,getValues,
+    handleSubmit,
+  } = useForm<tipFormData>({
+    resolver: zodResolver(tipSchema),
+    defaultValues:{
+      date:new Date()
+    }
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  console.log("errors", errors);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // setFormData({ ...formData, [e.target.name]: e.target.value });
+    setValue("description", e.target.value);
   };
 
   const handleDateChange = (date: Date) => {
-    setFormData({ ...formData, date });
+    setValue("date", date);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, image: e.target.files[0] });
+      const file = e.target.files[0];
+      // setFormData({ ...formData, image: file });
+      setValue("image", e.target.files);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form Data Submitted: ", formData);
+  const onSubmit = () => {
+   
     // Add form submission logic here (e.g., API call)
+    const formData=getValues()
+     console.log("Form Data Submitted: ", formData);
   };
 
   return (
@@ -48,73 +78,101 @@ const AddTipModal = () => {
           </DialogHeader>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
-            <div>
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Enter your name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Description */}
-            <div>
-              <Label htmlFor="description">Description</Label>
-              <textarea
-                id="description"
-                name="description"
-                placeholder="Enter a description"
-                className="w-full p-2 border rounded-md"
-                rows={3}
-                value={formData.description}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Date Picker */}
-            <div>
-              <Label htmlFor="date">Select Date</Label>
-              <DatePicker
-                id="date"
-                selected={formData.date}
-                // onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Image Upload */}
             <div>
               <Label htmlFor="image">Upload Image</Label>
-              <Input
+
+              <Controller
+                control={control}
+                name="image"
+                render={({ field }) => (
+                  <Input
+                    // id="image"
+                    // name="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    // required
+                  />
+                )}
+              ></Controller>
+              {/* <Input
                 id="image"
                 name="image"
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 required
-              />
+              /> */}
+              {/* Image Preview */}
+              {imagePreview && (
+                <div className="mt-2">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-auto max-h-48 object-contain border rounded-md"
+                  />
+                </div>
+              )}
+              {errors.image && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.image.message}
+                </p>
+              )}
+            </div>
+
+            {/* Description */}
+            <div>
+              <Label htmlFor="description">Description</Label>
+
+              <Controller
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <textarea
+                    
+                    id="description"
+                    name="description"
+                    placeholder="Enter a description"
+                    className="w-full p-2 border rounded-md"
+                    rows={3}
+                    // value={formData.description}
+                    onChange={handleChange}
+                    // required
+                  />
+                )}
+              ></Controller>
+
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description.message}
+                </p>
+              )}
+            </div>
+
+            {/* Date Picker */}
+            <div>
+              <Label htmlFor="date">Select Date</Label>
+              <Controller
+                control={control}
+                name="date"
+                render={({ field }) => (
+                  <DatePicker
+                    id="date"
+                    
+                    selected={field.value??new Date()}
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd"
+                    className="w-full p-2 border rounded-md"
+                  />
+                )}
+              ></Controller>
+              {errors.date && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.date.message}
+                </p>
+              )}
             </div>
 
             {/* Footer Buttons */}

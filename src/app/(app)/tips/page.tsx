@@ -35,8 +35,8 @@ function page() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tips &&
           tips.length &&
-          tips.map((tip:any) => (
-            <TipCard image='' description={tip.description} onDelete={()=>console.log("delete")} onEdit={()=>console.log("edit")} />
+          tips.map((tip:any,idx) => (
+            <TipCard  key={idx}  image={"https://i.sstatic.net/l60Hf.png"} description={tip.description} onDelete={()=>console.log("delete")} onEdit={()=>console.log("edit")} />
             // <div
             //   key={tip._id}
             //   className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
