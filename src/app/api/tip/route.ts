@@ -28,9 +28,10 @@ export async function POST(request: NextRequest) {
 
     console.log("running here  instanceof")
     // Check if valid files are received
-    // if (!(image instanceof File)) {
-    //   return badRequest(NextResponse, "No valid files received")
-    // }
+    if (!(image instanceof File)) {
+      console.log("File code running here  instanceof")
+      return badRequest(NextResponse, "No valid files received")
+    }
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
