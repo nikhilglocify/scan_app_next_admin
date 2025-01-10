@@ -43,8 +43,8 @@ export async function POST(request: NextRequest) {
     console.log("saveTip", saveTip, saveTip._id)
 
 
-    const filePath = await uploadFileToLocal(image, saveTip._id)
-    // const filePath = await uploadFileToS3(image, saveTip._id)
+    // const filePath = await uploadFileToLocal(image, saveTip._id)
+    const filePath = await uploadFileToS3(image, saveTip._id)
     console.log("filePath",filePath)
 
     await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: filePath })
