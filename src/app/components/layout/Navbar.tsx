@@ -45,10 +45,10 @@ const Navbar: React.FC = () => {
     // alert("logout")
     console.log("logout");
     await signOut({
-      callbackUrl:"https://subtle-fox-bdcd12.netlify.app/sign-in"
+      // callbackUrl:"https://subtle-fox-bdcd12.netlify.app/sign-in"
     });
     
-    // router.push("/sign-in");
+    router.push("/sign-in");
     // localStorage.setItem("userName", "");
   };
 
