@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { navBarFields } from "@/app/helpers/contants";
 import { signOut } from "next-auth/react";
+import appLogo  from "@/assets/images/app_logo.png"
+import Image from "next/image";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
@@ -49,13 +51,14 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className=" border-gray-200 bg-gray-200">
+    <nav className=" border-gray-200  bg-orange-500">
       <div className="container flex flex-wrap items-center justify-between px-6 py-3 mx-auto">
         <Link
           href={"/"}
-          className="self-center text-xl font-semibold whitespace-nowrap"
+          className="self-center w-[150px] font-semibold whitespace-nowrap"
         >
-          FingerPrint Zero
+          <Image src={appLogo} alt="App Logo" />
+          {/* FingerPrint Zero */}
         </Link>
         <button
           data-collapse-toggle="navbar-dropdown"

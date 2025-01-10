@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         console.log(reqBody);
 
         //check if user already exists
-        const user = await User.findOne({where:{email:email}});
+        const user = await User.findOne({email:email});
 
         if (user) {
             return badRequest(NextResponse, "User already exists")

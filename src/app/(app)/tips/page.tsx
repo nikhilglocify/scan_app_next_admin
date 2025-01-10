@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { ediTipSchema, tipFormData, tipSchema } from "@/app/schemas/tipSchema";
+import { ediTipSchema, initialDefaultValues, tipFormData, tipSchema } from "@/app/schemas/tipSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 function page() {
@@ -19,7 +19,7 @@ function page() {
   const [isEdit, setIsEdit] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const [selectedTip, setSelectedTip] = useState<TipModel | null>(null);
+  
   const fetchDailyTip = async () => {
     try {
       setLoading(true);
@@ -33,11 +33,11 @@ function page() {
       }, 500);
     }
   };
+
+  
   const methods = useForm<tipFormData>({
-    resolver: zodResolver(isEdit?ediTipSchema:tipSchema),
-    defaultValues: {
-      date: new Date(),
-    },
+    resolver: zodResolver(isEdit ? ediTipSchema : tipSchema),
+    defaultValues:initialDefaultValues,
   });
   useEffect(() => {
     fetchDailyTip();
@@ -45,16 +45,15 @@ function page() {
 
   const { getValues, setValue, formState, reset } = methods;
 
+
   const handleEdit = (tip: TipModel) => {
     setIsEdit(true);
     setOpen(true);
     reset({
       description: tip.description,
       date: tip.date,
-      _id:tip._id
-      
+      _id: tip._id,
     });
-    console.log("running set open")
   };
 
   if (loading) {
@@ -68,9 +67,10 @@ function page() {
 
       <FormProvider {...methods}>
         <AddTipModal
-        open={open}
-        setIsEdit={setIsEdit}
-        setOpen={setOpen}
+
+          open={open}
+          setIsEdit={setIsEdit}
+          setOpen={setOpen}
           isEdit={isEdit}
           setFetchTips={setFetchTips}
           fetchTips={fetchTips}

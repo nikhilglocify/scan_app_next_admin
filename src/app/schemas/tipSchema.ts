@@ -50,4 +50,10 @@ export const ediTipSchema = z.object({
 });
 
 
+export const initialDefaultValues = {
+  description: "",
+  date: new Date(),
+  _id: "",
+};
+
 export type tipFormData = z.infer<typeof tipSchema>;

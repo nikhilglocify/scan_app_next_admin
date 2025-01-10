@@ -7,9 +7,9 @@ import connect from '@/app/dbConfig/connect';
 import Tip, { TipModel } from "@/app/models/tip"
 import { ReqBodyValidationresponse, validateBodyData } from "@/app/helpers/validation/requestBodyValiation";
 import { ediTipSchema, tipSchema } from "@/app/schemas/tipSchema";
-import { uploadFileToLocal } from "@/app/helpers/upload/fileUpload";
-
-
+import { uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUpload";
+// import connect from "@/app/dbConfig/connect";
+connect()
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,7 +41,9 @@ export async function POST(request: NextRequest) {
     console.log("saveTip", saveTip, saveTip._id)
 
 
-    const filePath = await uploadFileToLocal(image, saveTip._id)
+    // const filePath = await uploadFileToLocal(image, saveTip._id)
+    const filePath = await uploadFileToS3(image, saveTip._id)
+    console.log("filePath",filePath)
 
     await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: filePath })
 
@@ -111,7 +113,7 @@ export async function GET(request: NextRequest) {
 
   } catch (error: any) {
 
-    return badRequest(NextRequest, error.message || "something went wrong")
+    return badRequest(NextResponse, error.message || "something went wrong")
 
 
   }

@@ -15,7 +15,11 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller, useFormContext } from "react-hook-form";
-import { tipFormData, tipSchema } from "@/app/schemas/tipSchema";
+import {
+  initialDefaultValues,
+  tipFormData,
+  tipSchema,
+} from "@/app/schemas/tipSchema";
 import { addTip, editTip } from "@/app/appApi/Tip";
 import toast from "react-hot-toast";
 
@@ -63,7 +67,12 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
       setImagePreview(URL.createObjectURL(file));
     }
   };
-
+  const resetForm = () => {
+    reset(initialDefaultValues);
+    setIsEdit(false);
+    setOpen(false);
+    setImagePreview(null)
+  };
   const onSubmit = async () => {
     try {
       const formData = getValues();
@@ -94,8 +103,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
         <DialogTrigger asChild className="absolute right-2 top-20">
           <Button
             onClick={() => {
-              setIsEdit(false);
-              reset({});
+              resetForm();
             }}
           >
             Add Tip
@@ -136,7 +144,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                   />
                 </div>
               )}
-              {imagePreview  && (
+              {imagePreview && (
                 <div className="mt-2">
                   <img
                     src={imagePreview}
@@ -174,6 +182,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
               <Controller
                 control={control}
                 name="description"
+                defaultValue={""}
                 render={({ field }) => (
                   <textarea
                     id="description"
@@ -201,6 +210,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
               <Controller
                 control={control}
                 name="date"
+                defaultValue={new Date()}
                 render={({ field }) => (
                   <DatePicker
                     id="date"
@@ -222,7 +232,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
             <DialogFooter>
               <Button type="submit">Save</Button>
               <DialogTrigger asChild>
-                <Button onClick={() => setIsEdit(false)} variant="outline">
+                <Button onClick={() => resetForm()} variant="outline">
                   Cancel
                 </Button>
               </DialogTrigger>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 import { TipModel } from "@/app/models/tip";
+import { generateClientS3Url } from "@/app/helpers/utils";
 
 type TipCardProps = {
   tip:TipModel
@@ -22,13 +23,13 @@ const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={()=>onEdit(tip)}>Edit</DropdownMenuItem>
-          <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
+          {/* <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
         <h2 className="py-2 px-3">Date: {new Date(tip.date).toDateString()}</h2>
       {/* Card Image */}
       <div className="aspect-w-16 aspect-h-9 overflow-hidden rounded-t-md">
-        <img src={"https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"} alt="Card Image" className="w-[100%] h-[100%] object-contain" />
+        <img src={generateClientS3Url("uploads/6780aabf05a66d06484b0704_copy-icon.png")|| "https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"} alt="Card Image" className="w-[100%] h-[100%] object-contain" />
       </div>
 
       {/* Card Description */}
