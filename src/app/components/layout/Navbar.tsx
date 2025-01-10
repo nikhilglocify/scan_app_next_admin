@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
       callbackUrl:"https://subtle-fox-bdcd12.netlify.app/sign-in"
     });
     
-    router.push("/sign-in");
+    // router.push("/sign-in");
     // localStorage.setItem("userName", "");
   };
 
