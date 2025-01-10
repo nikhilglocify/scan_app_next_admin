@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     console.log("saveTip", saveTip, saveTip._id)
 
 
-    if (image  ) {
+    if (image) {
       const file_key = generateFileKey(saveTip._id, "FileName")
       await store.set(file_key, image);
       console.log("filePath", file_key)
@@ -86,10 +86,10 @@ export async function PUT(request: NextRequest) {
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
 
-    const formValidationData: ReqBodyValidationresponse = validateBodyData(ediTipSchema, formPayload);
-    if (!formValidationData.isValidated) {
-      return badRequest(NextResponse, formValidationData.message, formValidationData.error);
-    }
+    // const formValidationData: ReqBodyValidationresponse = validateBodyData(ediTipSchema, formPayload);
+    // if (!formValidationData.isValidated) {
+    //   return badRequest(NextResponse, formValidationData.message, formValidationData.error);
+    // }
 
     // Check if valid files are received
     // if ((image instanceof File)) {
@@ -108,18 +108,26 @@ export async function PUT(request: NextRequest) {
     const editTip = await Tip.findByIdAndUpdate(formBody._id, tipObj)
     // console.log("saveTip", formBody._id, saveTip._id)
 
-    if ((image instanceof File) && formBody._id) {
+    // if ((image instanceof File) && formBody._id) {
 
-      const filePath = await uploadFileToLocal(image, formBody._id)
+    //   const filePath = await uploadFileToLocal(image, formBody._id)
 
-      await Tip.findByIdAndUpdate(formBody._id, { isImageUploaded: true, image: filePath })
+    //   await Tip.findByIdAndUpdate(formBody._id, { isImageUploaded: true, image: filePath })
+    // }
+
+    if (image && formBody._id) {
+      const file_key = generateFileKey(formBody._id, "FileName")
+      await store.set(file_key, image);
+      console.log("filePath", file_key)
+
+      await Tip.findByIdAndUpdate(formBody._id, { isImageUploaded: true, image: file_key })
     }
 
 
-    return successResponseWithData(NextResponse, "success")
+    return successResponseWithData(NextResponse, "Tip edited succesfully")
   } catch (error: any) {
     console.log("error", error.message)
-    return badRequest(NextResponse, "error")
+    return badRequest(NextResponse, error.message || "error")
 
   }
 
@@ -130,7 +138,7 @@ export async function GET(request: NextRequest) {
   try {
     await connect()
 
-    const tips = await Tip.find().sort({ date: 'desc' }).limit(5)
+    const tips = await Tip.find().sort({ date: 'desc' })
 
 
     return successResponseWithData(NextResponse, "successfully fetched Tips", tips)
