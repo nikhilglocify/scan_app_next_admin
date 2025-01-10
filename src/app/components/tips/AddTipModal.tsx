@@ -56,8 +56,8 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
     setValue("description", e.target.value);
   };
 
-  const handleDateChange = (date: Date) => {
-    setValue("date", date);
+  const handleDateChange = (date: Date | null) => {
+    setValue("date", date || new Date()); // Fallback to the current date if `null`
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,7 +215,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                   <DatePicker
                     id="date"
                     selected={field.value ?? new Date()}
-                    onChange={handleDateChange}
+                    onChange={(date: Date | null) => handleDateChange(date)} // Updated to accept Date | null
                     dateFormat="yyyy-MM-dd"
                     className="w-full p-2 border rounded-md"
                   />
