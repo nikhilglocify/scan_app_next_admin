@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     return successResponseWithData(NextResponse, "success")
   } catch (error: any) {
     console.log("error", error.message)
-    return badRequest(NextResponse, "error")
+    return badRequest(NextResponse, error.message || "something went wrong")
 
   }
 
