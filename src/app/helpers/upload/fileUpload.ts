@@ -39,6 +39,7 @@ export async function uploadFileToLocal(file: File, id: string) {
 
 
   export async function uploadFileToS3(file: File, uuid: string) {
+    console.log("running  uploadFileToS3",{file,uuid})
 
     const chunks: Uint8Array[] = [];
   

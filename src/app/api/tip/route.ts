@@ -11,6 +11,7 @@ import { uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUplo
 // import connect from "@/app/dbConfig/connect";
 
 
+
 export async function POST(request: NextRequest) {
   try {
 
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
       return badRequest(NextResponse, formValidationData.message, formValidationData.error);
     }
 
+    console.log("running here  instanceof")
     // Check if valid files are received
     if (!(image instanceof File)) {
       return badRequest(NextResponse, "No valid files received")
