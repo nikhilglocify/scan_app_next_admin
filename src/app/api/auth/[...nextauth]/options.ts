@@ -49,23 +49,12 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async redirect({ url, baseUrl }) {
-
-      const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || baseUrl;
-
-      if (url.startsWith('/')) {
-        return `${frontendUrl}${url}`;
+      // Allow only URLs from your domain
+      if (url.startsWith(baseUrl)) {
+        return url;
+      } else {
+        return baseUrl;
       }
-
-      try {
-        const parsedUrl = new URL(url);
-        if (parsedUrl.origin === frontendUrl) {
-          return url;
-        }
-      } catch (error) {
-        console.error('Invalid URL in redirect:', url);
-      }
-
-      return baseUrl;
     },
     async session({ session, token }) {
       if (token) {
@@ -86,6 +75,6 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/sign-in',
-    signOut:'/sign-in'
+    // signOut:'/sign-in'
   },
 };
