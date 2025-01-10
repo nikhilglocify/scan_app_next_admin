@@ -22,6 +22,7 @@ import {
 } from "@/app/schemas/tipSchema";
 import { addTip, editTip } from "@/app/appApi/Tip";
 import toast from "react-hot-toast";
+import Loader from "../global/loader";
 
 type AddTipModalProps = {
   setFetchTips: any;
@@ -30,8 +31,8 @@ type AddTipModalProps = {
   open: boolean;
   setOpen: any;
   setIsEdit: any;
-  setImagePreview:any,
-  imagePreview:any,
+  setImagePreview: any;
+  imagePreview: any;
 };
 
 const AddTipModal: React.FC<AddTipModalProps> = ({
@@ -53,8 +54,9 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
     reset,
   } = useFormContext();
 
-  console.log("errors", errors);
-  
+  const [isLoadingApi, setIsLoadingApi] = useState(false);
+
+  // console.log("errors", errors);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue("description", e.target.value);
@@ -75,10 +77,11 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
     reset(initialDefaultValues);
     setIsEdit(false);
     setOpen(false);
-    setImagePreview(null)
+    setImagePreview(null);
   };
   const onSubmit = async () => {
     try {
+      setIsLoadingApi(true);
       const formData = getValues();
       console.log("Form Data Submitted changes: ", formData);
 
@@ -87,6 +90,8 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
       } else {
         await addTip(formData);
       }
+
+      setIsLoadingApi(false);
 
       setFetchTips(!fetchTips);
 
@@ -103,7 +108,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
   return (
     <div>
       {/* Trigger to Open Modal */}
-      <Dialog open={open} onOpenChange={setOpen} >
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild className="absolute right-2 top-20">
           <Button
             onClick={() => {
@@ -114,51 +119,55 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
           </Button>
         </DialogTrigger>
         <DialogContent className="mt-4">
-          <DialogHeader >
+          <DialogHeader>
             <DialogTitle>{isEdit ? "Edit Tip" : "Add New Tip"}</DialogTitle>
           </DialogHeader>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Image Upload */}
-            <div>
-              <Label htmlFor="image">Upload Image</Label>
+          {isLoadingApi ? (
+            <div className="space-y-4" >
+              <Loader color="black" message="saving changes..." />
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {/* Image Upload */}
+              <div>
+                <Label htmlFor="image">Upload Image</Label>
 
-              <Controller
-                control={control}
-                name="image"
-                render={({ field }) => (
-                  <Input
-                    // id="image"
-                    // name="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
+                <Controller
+                  control={control}
+                  name="image"
+                  render={({ field }) => (
+                    <Input
+                      // id="image"
+                      // name="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  )}
+                ></Controller>
+                {isEdit && !imagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={
+                        "https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"
+                      }
+                      alt="Preview"
+                      className="w-full h-auto max-h-48 object-contain border rounded-md"
+                    />
+                  </div>
                 )}
-              ></Controller>
-              {isEdit && !imagePreview && (
-                <div className="mt-2">
-                  <img
-                    src={
-                      "https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"
-                    }
-                    alt="Preview"
-                    className="w-full h-auto max-h-48 object-contain border rounded-md"
-                  />
-                </div>
-              )}
-              {imagePreview && (
-                <div className="mt-2">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-auto max-h-48 object-contain border rounded-md"
-                  />
-                </div>
-              )}
-              {/* Image Preview */}
-              {/* {imagePreview ||
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-auto max-h-48 object-contain border rounded-md"
+                    />
+                  </div>
+                )}
+                {/* Image Preview */}
+                {/* {imagePreview ||
                 (isEdit && (
                   <div className="mt-2">
                     <img
@@ -172,76 +181,78 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                     />
                   </div>
                 ))} */}
-              {errors.image && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.image.message as any}
-                </p>
-              )}
-            </div>
-
-            {/* Description */}
-            <div>
-              <Label htmlFor="description">Description</Label>
-
-              <Controller
-                control={control}
-                name="description"
-                defaultValue={""}
-                render={({ field }) => (
-                  <textarea
-                    id="description"
-                    name="description"
-                    placeholder="Enter a description"
-                    className="w-full p-2 border rounded-md"
-                    rows={3}
-                    value={field.value}
-                    onChange={handleChange}
-                    // required
-                  />
+                {errors.image && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.image.message as any}
+                  </p>
                 )}
-              ></Controller>
+              </div>
 
-              {errors.description && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors?.description?.message as any}
-                </p>
-              )}
-            </div>
+              {/* Description */}
+              <div>
+                <Label htmlFor="description">Description</Label>
 
-            {/* Date Picker */}
-            <div>
-              <Label htmlFor="date">Select Date</Label>
-              <Controller
-                control={control}
-                name="date"
-                defaultValue={new Date()}
-                render={({ field }) => (
-                  <DatePicker
-                    id="date"
-                    selected={field.value ?? new Date()}
-                    onChange={(date: Date | null) => handleDateChange(date)} // Updated to accept Date | null
-                    dateFormat="yyyy-MM-dd"
-                    className="w-full p-2 border rounded-md"
-                  />
+                <Controller
+                  control={control}
+                  name="description"
+                  defaultValue={""}
+                  render={({ field }) => (
+                    <textarea
+                      id="description"
+                      name="description"
+                      placeholder="Enter a description"
+                      className="w-full p-2 border rounded-md"
+                      rows={3}
+                      value={field.value}
+                      onChange={handleChange}
+                      // required
+                    />
+                  )}
+                ></Controller>
+
+                {errors.description && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors?.description?.message as any}
+                  </p>
                 )}
-              ></Controller>
-              {errors.date && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.date.message as any}
-                </p>
-              )}
-            </div>
+              </div>
 
-            {/* Footer Buttons */}
-            <DialogFooter>
-              <Button type="submit">Save</Button>
-              <DialogTrigger asChild>
-                <Button onClick={() => resetForm()} variant="outline">
-                  Cancel
-                </Button>
-              </DialogTrigger>
-            </DialogFooter>
-          </form>
+              {/* Date Picker */}
+              <div>
+                <Label htmlFor="date">Select Date</Label>
+                <Controller
+                  control={control}
+                  name="date"
+                  defaultValue={new Date()}
+                  render={({ field }) => (
+                    <DatePicker
+                      id="date"
+                      selected={field.value ?? new Date()}
+                      onChange={(date: Date | null) => handleDateChange(date)} // Updated to accept Date | null
+                      dateFormat="yyyy-MM-dd"
+                      className="w-full p-2 border rounded-md"
+                    />
+                  )}
+                ></Controller>
+                {errors.date && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.date.message as any}
+                  </p>
+                )}
+              </div>
+
+              {/* Footer Buttons */}
+              <DialogFooter>
+                <Button type="submit">Save</Button>
+                <DialogTrigger asChild>
+                  <Button onClick={() => resetForm()} variant="outline">
+                    Cancel
+                  </Button>
+                </DialogTrigger>
+              </DialogFooter>
+            </form>
+          )}
+          {/* Form */}
         </DialogContent>
       </Dialog>
     </div>
