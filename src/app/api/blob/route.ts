@@ -18,7 +18,7 @@ export const GET = async (request: NextRequest) => {
     if (!key) {
         return badRequest(NextResponse, "File key is required")
     }
-    const blob = await store.get(key?key:"uploads/6780d43cf7869cc6d758cd6b_FileName", { type: "stream", });
+    const blob = await store.get(key, { type: "stream", });
     console.log("blob ss",blob)
 
     if (!blob) {
