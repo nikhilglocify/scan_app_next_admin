@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
   try {
     await connect()
 
-    const tips = await Tip.find().sort({ date: 'desc' })
+    const tips = await Tip.find().sort({ date: 'desc' }).limit(5)
 
 
     return successResponseWithData(NextResponse, "successfully fetched Tips", tips)

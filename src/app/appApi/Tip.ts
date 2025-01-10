@@ -67,3 +67,28 @@ export const getTips = async () => {
 
     }
 }
+
+
+export const  getBlob=async()=>{
+
+
+    try {
+        const response = await axios.get(`/api/blob?key="uploads/6780d43cf7869cc6d758cd6b_FileName"`);
+
+        console.log("blob api",response)
+        return response.data
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                throw new Error(error.response.data.message);
+            } else if (error.request) {
+                throw new Error("No response from server");
+            }
+        }
+        throw new Error("Request setup error");
+
+    }
+  
+}

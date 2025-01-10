@@ -30,9 +30,13 @@ type AddTipModalProps = {
   open: boolean;
   setOpen: any;
   setIsEdit: any;
+  setImagePreview:any,
+  imagePreview:any,
 };
 
 const AddTipModal: React.FC<AddTipModalProps> = ({
+  setImagePreview,
+  imagePreview,
   fetchTips,
   setFetchTips,
   isEdit,
@@ -50,7 +54,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
   } = useFormContext();
 
   console.log("errors", errors);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue("description", e.target.value);
@@ -99,7 +103,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
   return (
     <div>
       {/* Trigger to Open Modal */}
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={setOpen} >
         <DialogTrigger asChild className="absolute right-2 top-20">
           <Button
             onClick={() => {
@@ -110,7 +114,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
           </Button>
         </DialogTrigger>
         <DialogContent className="mt-4">
-          <DialogHeader>
+          <DialogHeader >
             <DialogTitle>{isEdit ? "Edit Tip" : "Add New Tip"}</DialogTitle>
           </DialogHeader>
 
