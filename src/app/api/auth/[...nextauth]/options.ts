@@ -34,6 +34,8 @@ export const authOptions: NextAuthOptions = {
           throw new Error(err);
         }
       },
+
+      
     }),
   ],
   callbacks: {
@@ -45,6 +47,25 @@ export const authOptions: NextAuthOptions = {
         
       }
       return token;
+    },
+    async redirect({ url, baseUrl }) {
+
+      const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || baseUrl;
+
+      if (url.startsWith('/')) {
+        return `${frontendUrl}${url}`;
+      }
+
+      try {
+        const parsedUrl = new URL(url);
+        if (parsedUrl.origin === frontendUrl) {
+          return url;
+        }
+      } catch (error) {
+        console.error('Invalid URL in redirect:', url);
+      }
+
+      return baseUrl;
     },
     async session({ session, token }) {
       if (token) {
@@ -60,6 +81,8 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     // maxAge:60
   },
+
+  
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/sign-in',
