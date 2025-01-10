@@ -9,10 +9,12 @@ import { ReqBodyValidationresponse, validateBodyData } from "@/app/helpers/valid
 import { ediTipSchema, tipSchema } from "@/app/schemas/tipSchema";
 import { uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUpload";
 // import connect from "@/app/dbConfig/connect";
-connect()
+
 
 export async function POST(request: NextRequest) {
   try {
+
+    await connect()
 
     const formData = await request.formData();
     let formPayload = Object.fromEntries(formData);
@@ -58,6 +60,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    await connect()
     console.log("running",)
     const formData = await request.formData();
     let formPayload = Object.fromEntries(formData);
