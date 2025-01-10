@@ -14,17 +14,17 @@ import { uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUplo
 
 export async function POST(request: NextRequest) {
   try {
-
+    console.log("running here  instanceof debuf")
     await connect()
 
     const formData = await request.formData();
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
 
-    const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
-    if (!formValidationData.isValidated) {
-      return badRequest(NextResponse, formValidationData.message, formValidationData.error);
-    }
+    // const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
+    // if (!formValidationData.isValidated) {
+    //   return badRequest(NextResponse, formValidationData.message, formValidationData.error);
+    // }
 
     console.log("running here  instanceof")
     // Check if valid files are received
