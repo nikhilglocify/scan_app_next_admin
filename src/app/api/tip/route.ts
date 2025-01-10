@@ -7,10 +7,15 @@ import connect from '@/app/dbConfig/connect';
 import Tip, { TipModel } from "@/app/models/tip"
 import { ReqBodyValidationresponse, validateBodyData } from "@/app/helpers/validation/requestBodyValiation";
 import { ediTipSchema, tipSchema } from "@/app/schemas/tipSchema";
-import { uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUpload";
+import { generateFileKey, uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUpload";
 // import connect from "@/app/dbConfig/connect";
-
-
+import { getStore } from "@netlify/blobs";
+const store = getStore({
+  name: 'scan_app_tip_blob',
+  siteID: process.env.NETLIFY_SITE_ID,
+  token: process.env.NETLIFY_BLOB_TOKEN,
+  consistency: "strong"
+})
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,6 +26,11 @@ export async function POST(request: NextRequest) {
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
 
+    // const userUploadStore = getStore({ name: "TipUpload", consistency: "strong" });
+    // Set the file in the store. Replace `<key>` with a unique key for the file.
+
+
+
     // const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
     // if (!formValidationData.isValidated) {
     //   return badRequest(NextResponse, formValidationData.message, formValidationData.error);
@@ -28,10 +38,10 @@ export async function POST(request: NextRequest) {
 
     console.log("running here  instanceof")
     // Check if valid files are received
-    if (!(image instanceof File)) {
-      console.log("File code running here  instanceof")
-      return badRequest(NextResponse, "No valid files received")
-    }
+    // if (!(image instanceof File)) {
+    //   console.log("File code running here  instanceof")
+    //   return badRequest(NextResponse, "No valid files received")
+    // }
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
@@ -46,11 +56,18 @@ export async function POST(request: NextRequest) {
     console.log("saveTip", saveTip, saveTip._id)
 
 
-    // const filePath = await uploadFileToLocal(image, saveTip._id)
-    const filePath = await uploadFileToS3(image as any, saveTip._id)
-    console.log("filePath",filePath)
+    if (image  ) {
+      const file_key = generateFileKey(saveTip._id, "FileName")
+      await store.set(file_key, image);
+      console.log("filePath", file_key)
 
-    await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: filePath })
+      await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: file_key })
+    }
+
+
+    // const filePath = await uploadFileToLocal(image, saveTip._id)
+    // const filePath = await uploadFileToS3(image as any, saveTip._id)
+
 
     return successResponseWithData(NextResponse, "success")
   } catch (error: any) {
@@ -88,7 +105,7 @@ export async function PUT(request: NextRequest) {
     }
 
 
-    const editTip = await Tip.findByIdAndUpdate(formBody._id,tipObj)
+    const editTip = await Tip.findByIdAndUpdate(formBody._id, tipObj)
     // console.log("saveTip", formBody._id, saveTip._id)
 
     if ((image instanceof File) && formBody._id) {
