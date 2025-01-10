@@ -15,49 +15,36 @@ import Image from "next/image";
 
 type TipCardProps = {
   tip: TipModel;
-  onEdit: (tip: TipModel,imagePreview:string) => void;
+  onEdit: (tip: TipModel, imagePreview: string) => void;
   onDelete: () => void;
 };
 
 const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
   const [blobURL, setBlobURL] = useState("");
-  // const fetchBlob = async () => {
-  //   try {
-  //     await getBlob()
-  //       .then((blob) => {
-  //         setBlobURL((blob));
-          
-  //         // const url = URL.createObjectURL(blob);
-  //         // console.log("url",url)
-  //       })
-  //       .catch((error) => {
-  //         // Error handling here
-  //         console.error(error);
-  //       });
-  //   } catch (error) {
-  //   } finally {
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchBlob();
-  // }, []);
+
   const fetchBlob = async () => {
     try {
-        const response = await fetch(`/api/blob?key=${tip.image}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        setBlobURL(url);
+      const response = await fetch(`/api/blob?key=${tip.image}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setBlobURL(url);
     } catch (error) {
-        console.error("Error fetching blob:", error);
+      console.error("Error fetching blob:", error);
     }
-};
+  };
 
-useEffect(() => {
-    fetchBlob();
-}, []);
+  useEffect(() => {
+    // fetchBlob();
+    if (tip.image) {
+      const url = generateClientS3Url(tip.image);
+      setBlobURL(url);
+    }else{
+      setBlobURL("https://img.freepik.com/free-vector/quick-helpful-tips-advice-yellow-background-vector-illustration_1017-40994.jpg")
+    }
+  }, []);
   return (
     <Card className="relative h-[100%]">
       {/* Kebab Menu */}
@@ -72,7 +59,9 @@ useEffect(() => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => onEdit(tip,blobURL)}>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onEdit(tip, blobURL)}>
+            Edit
+          </DropdownMenuItem>
           {/* <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
@@ -80,7 +69,12 @@ useEffect(() => {
       {/* Card Image */}
       <div className="aspect-w-16 aspect-h-9 overflow-hidden rounded-t-md">
         {blobURL ? (
-          <img src={blobURL} id="myImg" alt="Card Image" className="w-[100%] h-[100%] object-contain" />
+          <img
+            src={blobURL}
+            id="myImg"
+            alt="Card Image"
+            className="w-[100%] h-[100%] object-contain"
+          />
         ) : (
           <p className="text-center">Loading...</p>
         )}

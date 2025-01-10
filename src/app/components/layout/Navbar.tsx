@@ -44,9 +44,11 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     // alert("logout")
     console.log("logout");
-    await signOut();
+    await signOut({
+      callbackUrl:"https://subtle-fox-bdcd12.netlify.app/sign-in"
+    });
     
-    // // router.push("/sign-in");
+    router.push("/sign-in");
     // localStorage.setItem("userName", "");
   };
 

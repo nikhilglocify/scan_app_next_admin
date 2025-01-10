@@ -26,9 +26,7 @@ export async function POST(request: NextRequest) {
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
 
-    // const userUploadStore = getStore({ name: "TipUpload", consistency: "strong" });
-    // Set the file in the store. Replace `<key>` with a unique key for the file.
-
+  
 
 
     // const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
@@ -57,9 +55,10 @@ export async function POST(request: NextRequest) {
 
 
     if (image) {
-      const file_key = generateFileKey(saveTip._id, "FileName")
-      await store.set(file_key, image);
-      console.log("filePath", file_key)
+      // const file_key = generateFileKey(saveTip._id, "FileName")
+      // await store.set(file_key, image);
+      // console.log("filePath", file_key)
+      const file_key = await uploadFileToS3(image as any, saveTip._id)
 
       await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: file_key })
     }
@@ -87,14 +86,7 @@ export async function PUT(request: NextRequest) {
     const image = formData.get("image");
 
     // const formValidationData: ReqBodyValidationresponse = validateBodyData(ediTipSchema, formPayload);
-    // if (!formValidationData.isValidated) {
-    //   return badRequest(NextResponse, formValidationData.message, formValidationData.error);
-    // }
-
-    // Check if valid files are received
-    // if ((image instanceof File)) {
-    //   return badRequest(NextResponse, "No valid files received")
-    // }
+    
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
@@ -116,10 +108,11 @@ export async function PUT(request: NextRequest) {
     // }
 
     if (image && formBody._id) {
-      const file_key = generateFileKey(formBody._id, "FileName")
-      await store.set(file_key, image);
+      // const file_key = generateFileKey(formBody._id, "FileName")
+      // await store.set(file_key, image);
+      
+      const file_key = await uploadFileToS3(image as any, formBody._id)
       console.log("filePath", file_key)
-
       await Tip.findByIdAndUpdate(formBody._id, { isImageUploaded: true, image: file_key })
     }
 

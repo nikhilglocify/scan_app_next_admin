@@ -86,7 +86,7 @@ function page() {
         ></AddTipModal>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {tipData &&
-            tipData.length > 0 &&
+            tipData.length > 0?
             tipData.map((tip: TipModel, idx) => (
               <TipCard
                 key={idx}
@@ -94,7 +94,11 @@ function page() {
                 onEdit={(tip: TipModel,imagePreview:string) => handleEdit(tip,imagePreview)}
                 tip={tip}
               />
-            ))}
+            )):<div className="my-auto mx-auto text-center">
+
+              <h2 className="text-center mx-auto my-auto">No Tips Found ....</h2>
+            </div>
+              }
         </div>
       </FormProvider>
     </div>
