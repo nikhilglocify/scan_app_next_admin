@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
 
     console.log("running here  instanceof")
     // Check if valid files are received
-    if (!(image instanceof File)) {
-      return badRequest(NextResponse, "No valid files received")
-    }
+    // if (!(image instanceof File)) {
+    //   return badRequest(NextResponse, "No valid files received")
+    // }
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
 
     // const filePath = await uploadFileToLocal(image, saveTip._id)
-    const filePath = await uploadFileToS3(image, saveTip._id)
+    const filePath = await uploadFileToS3(image as any, saveTip._id)
     console.log("filePath",filePath)
 
     await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: filePath })
