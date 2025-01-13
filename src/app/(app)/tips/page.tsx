@@ -49,14 +49,14 @@ function page() {
 
   const { getValues, setValue, formState, reset } = methods;
 
-  const handleEdit = (tip: TipModel,imagePreview:string) => {
+  const handleEdit = (tip: TipModel, imagePreview: string) => {
     setIsEdit(true);
     setOpen(true);
-    console.log("tip image",tip.image)
-    if(imagePreview){
-      setImagePreview(imagePreview)
+    console.log("tip image", tip.image);
+    if (imagePreview) {
+      setImagePreview(imagePreview);
     }
-    
+
     reset({
       description: tip.description,
       date: tip.date,
@@ -71,36 +71,43 @@ function page() {
   }
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-center mb-8">Tips List</h1>
+      <div className="container mx-auto relative px-6">
+        <h1 className="text-3xl font-bold text-center mb-8">Tips List</h1>
 
-      <FormProvider {...methods}>
-        <AddTipModal
-          imagePreview={imagePreview}
-          setImagePreview={setImagePreview}
-          open={open}
-          setIsEdit={setIsEdit}
-          setOpen={setOpen}
-          isEdit={isEdit}
-          setFetchTips={setFetchTips}
-          fetchTips={fetchTips}
-        ></AddTipModal>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {tipData &&
-            tipData.length > 0?
-            tipData.map((tip: TipModel, idx) => (
-              <TipCard
-                key={idx}
-                onDelete={() => console.log("delete")}
-                onEdit={(tip: TipModel,imagePreview:string) => handleEdit(tip,imagePreview)}
-                tip={tip}
-              />
-            )):<div className="my-auto mx-auto text-center">
+        <FormProvider {...methods}>
+          <AddTipModal
+            imagePreview={imagePreview}
+            setImagePreview={setImagePreview}
+            open={open}
+            setIsEdit={setIsEdit}
+            setOpen={setOpen}
+            isEdit={isEdit}
+            setFetchTips={setFetchTips}
+            fetchTips={fetchTips}
+          ></AddTipModal>
 
-              <h2 className="text-center mx-auto my-auto">No Tips Found ....</h2>
+          {tipData && tipData.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {tipData.map((tip: TipModel, idx) => (
+                <TipCard
+                  key={idx}
+                  onDelete={() => console.log("delete")}
+                  onEdit={(tip: TipModel, imagePreview: string) =>
+                    handleEdit(tip, imagePreview)
+                  }
+                  tip={tip}
+                />
+              ))}
             </div>
-              }
-        </div>
-      </FormProvider>
+          ) : (
+            <div className="min-h-[70vh] flex items-center justify-center">
+            <h2 className="text-lg ">No Tips Found ...</h2>
+          </div>
+          )}
+
+          
+        </FormProvider>
+      </div>
     </div>
   );
 }

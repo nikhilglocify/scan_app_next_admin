@@ -121,7 +121,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
           }
         }}
       >
-        <DialogTrigger asChild className="absolute right-2 top-20 mr-[16px]">
+        <DialogTrigger asChild className="absolute right-6 top-0 ">
           <Button
             onClick={() => {
               resetForm();
