@@ -81,10 +81,9 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
   };
   const onSubmit = async () => {
     try {
-      
       const formData = getValues();
-      if(formData?.image) {
-        setIsLoadingApi(true)
+      if (formData?.image) {
+        setIsLoadingApi(true);
       }
       console.log("Form Data Submitted changes: ", formData);
 
@@ -105,7 +104,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
       setOpen(false);
     } catch (error: any) {
       toast.error(error.message || "something went wrong");
-    }finally{
+    } finally {
       setIsLoadingApi(false);
     }
   };
@@ -113,7 +112,15 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
   return (
     <div>
       {/* Trigger to Open Modal */}
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) {
+            resetForm(); // Reset form when dialog is closed
+          }
+        }}
+      >
         <DialogTrigger asChild className="absolute right-2 top-20">
           <Button
             onClick={() => {
@@ -129,7 +136,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
           </DialogHeader>
 
           {isLoadingApi ? (
-            <div className="space-y-4" >
+            <div className="space-y-4">
               <Loader color="black" message="saving changes..." />
             </div>
           ) : (
@@ -232,7 +239,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                   render={({ field }) => (
                     <DatePicker
                       id="date"
-                      minDate={new Date()}
+                      // minDate={new Date()}
                       selected={field.value ?? new Date()}
                       onChange={(date: Date | null) => handleDateChange(date)} // Updated to accept Date | null
                       dateFormat="yyyy-MM-dd"

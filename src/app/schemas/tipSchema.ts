@@ -17,11 +17,20 @@ export const tipSchema = z.object({
   ),
 
   date: z
-    .union([z.string(), z.date()])
-    .transform((value) => (typeof value === 'string' ? new Date(value) : value))
-    .refine((date) => !isNaN(date.getTime()), {
+  .union([z.string(), z.date()])
+  .transform((value) => (typeof value === "string" ? new Date(value) : value))
+  .refine(
+    (date) => !isNaN(date.getTime()), // Check if date is valid
+    {
       message: "Date is required and must be valid",
-    }),
+    }
+  )
+  .refine(
+    (date) => date >= new Date(), // Ensure the date is not in the past
+    {
+      message: "Back Date is not allowed",
+    }
+  )
 });
 
 

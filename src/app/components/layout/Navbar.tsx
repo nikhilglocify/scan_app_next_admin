@@ -35,22 +35,19 @@ const Navbar: React.FC = () => {
     const updatedMenu = [...navBarMenu];
     updatedMenu[idx].showDropdown = isDropdown;
     setNavBarMenu(updatedMenu);
-    // setDropdownVisible(!dropdownVisible);
+
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
   const handleLogout = async () => {
-    // alert("logout")
-    console.log("logout");
+
     await signOut({
       callbackUrl:"https://subtle-fox-bdcd12.netlify.app/sign-in",
       redirect:true
     });
     
-    // router.push("/sign-in");
-    // localStorage.setItem("userName", "");
   };
 
   return (

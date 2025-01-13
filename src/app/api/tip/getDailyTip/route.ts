@@ -11,7 +11,6 @@ export async function GET(request: NextRequest) {
 
   try {
 
-    // const tips = await Tip.find().sort({ date: 'desc' }) 
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0); 
     
