@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       return badRequest(NextResponse, formValidationData.message, formValidationData.error);
     }
 
-    console.log("running here  instanceof")
+    console.log("running here  instanceof",File)
     // Check if valid files are received
     if (!(image instanceof File)) {
       console.log("File code running here  instanceof")
