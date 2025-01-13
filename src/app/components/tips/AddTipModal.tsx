@@ -81,8 +81,10 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
   };
   const onSubmit = async () => {
     try {
-      setIsLoadingApi(true);
       const formData = getValues();
+      if (formData?.image) {
+        setIsLoadingApi(true);
+      }
       console.log("Form Data Submitted changes: ", formData);
 
       if (isEdit) {
@@ -102,14 +104,24 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
       setOpen(false);
     } catch (error: any) {
       toast.error(error.message || "something went wrong");
+    } finally {
+      setIsLoadingApi(false);
     }
   };
 
   return (
     <div>
       {/* Trigger to Open Modal */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild className="absolute right-2 top-20">
+      <Dialog
+        open={open}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) {
+            resetForm(); // Reset form when dialog is closed
+          }
+        }}
+      >
+        <DialogTrigger asChild className="absolute right-6 top-0 ">
           <Button
             onClick={() => {
               resetForm();
@@ -124,7 +136,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
           </DialogHeader>
 
           {isLoadingApi ? (
-            <div className="space-y-4" >
+            <div className="space-y-4">
               <Loader color="black" message="saving changes..." />
             </div>
           ) : (
@@ -146,7 +158,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                     />
                   )}
                 ></Controller>
-                {isEdit && !imagePreview && (
+                {/* {isEdit && !imagePreview && (
                   <div className="mt-2">
                     <img
                       src={
@@ -156,7 +168,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                       className="w-full h-auto max-h-48 object-contain border rounded-md"
                     />
                   </div>
-                )}
+                )} */}
                 {imagePreview && (
                   <div className="mt-2">
                     <img
@@ -227,6 +239,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                   render={({ field }) => (
                     <DatePicker
                       id="date"
+                      minDate={new Date()}
                       selected={field.value ?? new Date()}
                       onChange={(date: Date | null) => handleDateChange(date)} // Updated to accept Date | null
                       dateFormat="yyyy-MM-dd"

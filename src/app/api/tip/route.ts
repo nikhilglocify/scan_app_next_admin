@@ -19,28 +19,21 @@ const store = getStore({
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("running here  instanceof debuf")
+
     await connect()
 
     const formData = await request.formData();
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
-
-  
-
-
     const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
     if (!formValidationData.isValidated) {
       return badRequest(NextResponse, formValidationData.message, formValidationData.error);
     }
 
-    console.log("running here  instanceof",File)
+
     // Check if valid files are received
     if (!(image instanceof File)) {
-      console.log("File code running here  instanceof")
       return badRequest(NextResponse, "No valid files received")
-    }else{
-      console.log("updated changes")
     }
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
@@ -53,24 +46,21 @@ export async function POST(request: NextRequest) {
 
 
     const saveTip = await Tip.create(tipObj)
-    console.log("saveTip", saveTip, saveTip._id)
 
 
     if (image) {
       // const file_key = generateFileKey(saveTip._id, "FileName")
       // await store.set(file_key, image);
       // console.log("filePath", file_key)
+      // const filePath = await uploadFileToLocal(image, saveTip._id)
       const file_key = await uploadFileToS3(image as any, saveTip._id)
 
       await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: file_key })
     }
 
 
-    // const filePath = await uploadFileToLocal(image, saveTip._id)
-    // const filePath = await uploadFileToS3(image as any, saveTip._id)
 
-
-    return successResponseWithData(NextResponse, "success")
+    return successResponseWithData(NextResponse, "Tip added successfully")
   } catch (error: any) {
     console.log("error", error.message)
     return badRequest(NextResponse, error.message || "something went wrong")
@@ -82,41 +72,39 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     await connect()
-    console.log("running",)
     const formData = await request.formData();
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
 
-    // const formValidationData: ReqBodyValidationresponse = validateBodyData(ediTipSchema, formPayload);
-    
+    const formValidationData: ReqBodyValidationresponse = validateBodyData(ediTipSchema, formPayload);
+    if (!formValidationData.isValidated) {
+      return badRequest(NextResponse, formValidationData.message, formValidationData.error);
+    }
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
 
-    const tipObj: TipModel = {
+    let tipObj: TipModel = {
       description: formBody?.description,
       date: formBody?.date,
     }
 
 
-    const editTip = await Tip.findByIdAndUpdate(formBody._id, tipObj)
-    // console.log("saveTip", formBody._id, saveTip._id)
 
-    // if ((image instanceof File) && formBody._id) {
+    if ((image instanceof File) && formBody._id) {
 
-    //   const filePath = await uploadFileToLocal(image, formBody._id)
-
-    //   await Tip.findByIdAndUpdate(formBody._id, { isImageUploaded: true, image: filePath })
-    // }
-
-    if (image && formBody._id) {
       // const file_key = generateFileKey(formBody._id, "FileName")
       // await store.set(file_key, image);
-      
+
       const file_key = await uploadFileToS3(image as any, formBody._id)
       console.log("filePath", file_key)
-      await Tip.findByIdAndUpdate(formBody._id, { isImageUploaded: true, image: file_key })
+      await Tip.findByIdAndUpdate(formBody._id, { ...tipObj, isImageUploaded: true, image: file_key })
+    } else {
+
+      await Tip.findByIdAndUpdate(formBody._id, tipObj)
+
     }
+
 
 
     return successResponseWithData(NextResponse, "Tip edited succesfully")

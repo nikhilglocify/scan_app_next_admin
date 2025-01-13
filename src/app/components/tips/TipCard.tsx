@@ -46,7 +46,7 @@ const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
     }
   }, []);
   return (
-    <Card className="relative h-[100%]">
+    <Card className="relative h-[100%]" style={{}}>
       {/* Kebab Menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -67,10 +67,22 @@ const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
       </DropdownMenu>
       <h2 className="py-2 px-3">Date: {new Date(tip.date).toDateString()}</h2>
       {/* Card Image */}
-      <div className="aspect-w-16 aspect-h-9 overflow-hidden rounded-t-md">
+      <div className="aspect-w-16 aspect-h-9 overflow-hidden rounded-t-md" style={{
+    position: 'relative',
+    paddingTop:"100%",
+    
+  }}>
         {blobURL ? (
           <img
             src={blobURL}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+            }}
             id="myImg"
             alt="Card Image"
             className="w-[100%] h-[100%] object-contain"
