@@ -58,12 +58,14 @@ const SignInForm: React.FC = () => {
       <div>
         <label
           htmlFor="email"
+          
           className="block text-sm font-medium text-gray-700"
         >
           Email
         </label>
         <input
           id="email"
+          placeholder="Email"
           {...register("email")}
           className={`mt-1 block w-full px-3 py-2 border ${
             errors.email ? "border-red-500" : "border-gray-300"
@@ -84,6 +86,7 @@ const SignInForm: React.FC = () => {
         <input
           id="password"
           type="password"
+          placeholder="Password"
           {...register("password")}
           className={`mt-1 block w-full px-3 py-2 border ${
             errors.password ? "border-red-500" : "border-gray-300"

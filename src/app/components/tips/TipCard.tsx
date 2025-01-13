@@ -90,15 +90,13 @@ const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
         ) : (
           <p className="text-center">Loading...</p>
         )}
-        {/* <img src={generateClientS3Url("uploads/6780aabf05a66d06484b0704_copy-icon.png")|| "https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"} alt="Card Image" className="w-[100%] h-[100%] object-contain" /> */}
+       
       </div>
 
       {/* Card Description */}
       <CardContent>
-        {/* <CardHeader>
-          <CardTitle>Description</CardTitle>
-        </CardHeader> */}
-        <p className="text-lg text-muted-foreground mt-4">{tip?.description}</p>
+
+        <p className="text-lg text-muted-foreground mt-4 break-words">{tip?.description}</p>
       </CardContent>
     </Card>
   );
