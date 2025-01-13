@@ -7,10 +7,6 @@ import connect from '@/app/dbConfig/connect';
 import Tip, { TipModel } from "@/app/models/tip"
 
 
-
-
-
-
 export async function GET(request: NextRequest) {
 
   try {

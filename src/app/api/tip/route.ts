@@ -29,17 +29,19 @@ export async function POST(request: NextRequest) {
   
 
 
-    // const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
-    // if (!formValidationData.isValidated) {
-    //   return badRequest(NextResponse, formValidationData.message, formValidationData.error);
-    // }
+    const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
+    if (!formValidationData.isValidated) {
+      return badRequest(NextResponse, formValidationData.message, formValidationData.error);
+    }
 
     console.log("running here  instanceof")
     // Check if valid files are received
-    // if (!(image instanceof File)) {
-    //   console.log("File code running here  instanceof")
-    //   return badRequest(NextResponse, "No valid files received")
-    // }
+    if (!(image instanceof File)) {
+      console.log("File code running here  instanceof")
+      return badRequest(NextResponse, "No valid files received")
+    }else{
+      console.log("updated changes")
+    }
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
