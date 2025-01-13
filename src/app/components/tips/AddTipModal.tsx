@@ -81,8 +81,11 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
   };
   const onSubmit = async () => {
     try {
-      setIsLoadingApi(true);
+      
       const formData = getValues();
+      if(formData?.image) {
+        setIsLoadingApi(true)
+      }
       console.log("Form Data Submitted changes: ", formData);
 
       if (isEdit) {
@@ -102,6 +105,8 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
       setOpen(false);
     } catch (error: any) {
       toast.error(error.message || "something went wrong");
+    }finally{
+      setIsLoadingApi(false);
     }
   };
 
