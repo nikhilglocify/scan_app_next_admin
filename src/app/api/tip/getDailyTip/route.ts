@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     
     let tip = await Tip.findOne({
       date: { $gte: startOfDay, $lt: endOfDay }, 
-    }).sort({ date: 'desc',createdAt:"desc" }).lean();
+    }).sort({ date: 'desc',updatedAt:"desc",createdAt:"desc" }).lean();
 
     if(tip){
       console.log("Today's tip found",tip)
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
       tip = await Tip.findOne({
         date: { $lt: endOfDay }, 
-      }).sort({ date: 'desc',createdAt:"desc" }).lean();
+      }).sort({ date: 'desc',updatedAt:"desc",createdAt:"desc" }).lean();
   
       
       console.log("No Tip for the day sending the availabe")

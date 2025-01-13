@@ -9,12 +9,17 @@ export const tipSchema = z.object({
     })
     .min(1, "Description is required"),
 
-  image: z.custom<File>(
-    (files) => files instanceof File && files.size > 0,
-    {
-      message: "Thumbnail image is required",
-    }
-  ),
+    image: z.custom<File>(
+      (file) => {
+        if (!(file instanceof File)) return false; // Ensure it's a file object
+  
+        const validExtensions = ["image/jpeg", "image/png", "image/gif", "image/webp","image/jpg", "image/heic"];
+        return validExtensions.includes(file.type); // Check MIME type
+      },
+      {
+        message: "Only valid image files (JPEG, PNG, GIF, WEBP) are allowed.",
+      }
+    ),
 
   date: z
   .union([z.string(), z.date()])
@@ -26,11 +31,18 @@ export const tipSchema = z.object({
     }
   )
   .refine(
-    (date) => date >= new Date(), // Ensure the date is not in the past
+    (date) => {
+      const today = new Date();
+      // Clear the time portion of both dates for a pure date comparison
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(date);
+      selectedDate.setHours(0, 0, 0, 0);
+      return selectedDate >= today; // Return true if the selected date is today or in the future
+    },
     {
       message: "Back Date is not allowed",
     }
-  )
+  ),
 });
 
 
@@ -43,12 +55,17 @@ export const ediTipSchema = z.object({
     })
     .min(1, "Description is required"),
 
-  image: z.custom<File>(
-    (files) => files instanceof File && files.size > 0,
-    {
-      message: "Thumbnail image is required",
-    }
-  ).optional(),
+    image: z.custom<File>(
+      (file) => {
+        if (!(file instanceof File)) return false; // Ensure it's a file object
+  
+        const validExtensions = ["image/jpeg", "image/png", "image/gif", "image/webp","image/jpg", "image/heic"];
+        return validExtensions.includes(file.type); // Check MIME type
+      },
+      {
+        message: "Only valid image files (JPEG, PNG, GIF, WEBP) are allowed.",
+      }
+    ).optional(),
 
   date: z
     .union([z.string(), z.date()])

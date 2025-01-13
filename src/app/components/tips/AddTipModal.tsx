@@ -239,7 +239,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                   render={({ field }) => (
                     <DatePicker
                       id="date"
-                      // minDate={new Date()}
+                      minDate={new Date()}
                       selected={field.value ?? new Date()}
                       onChange={(date: Date | null) => handleDateChange(date)} // Updated to accept Date | null
                       dateFormat="yyyy-MM-dd"
