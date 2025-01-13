@@ -146,7 +146,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                     />
                   )}
                 ></Controller>
-                {isEdit && !imagePreview && (
+                {/* {isEdit && !imagePreview && (
                   <div className="mt-2">
                     <img
                       src={
@@ -156,7 +156,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                       className="w-full h-auto max-h-48 object-contain border rounded-md"
                     />
                   </div>
-                )}
+                )} */}
                 {imagePreview && (
                   <div className="mt-2">
                     <img
@@ -227,6 +227,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                   render={({ field }) => (
                     <DatePicker
                       id="date"
+                      minDate={new Date()}
                       selected={field.value ?? new Date()}
                       onChange={(date: Date | null) => handleDateChange(date)} // Updated to accept Date | null
                       dateFormat="yyyy-MM-dd"

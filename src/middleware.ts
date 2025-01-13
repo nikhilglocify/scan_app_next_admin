@@ -14,7 +14,10 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl;
 
   // Define paths that bypass authentication
-  const bypassAuthPaths = ['/sign-in', '/sign-up', '/verify'];
+  const bypassAuthPaths = ['/sign-in', '/verify'];
+  const disbaledPaths=['/sign-up']
+  const isDisabledPath = disbaledPaths.some((path) => url.pathname.startsWith(path));
+  
 
   // Redirect to dashboard if authenticated and accessing restricted pages
   if (
@@ -29,9 +32,10 @@ export async function middleware(request: NextRequest) {
 
   // Redirect unauthenticated users to sign-in
   if (!token) {
+    
     const isBypassPath = bypassAuthPaths.some((path) => url.pathname.startsWith(path));
 
-    if (!isBypassPath) {
+    if (!isBypassPath || isDisabledPath) {
       console.log('Redirecting to /sign-in');
       return NextResponse.redirect(new URL('/sign-in', request.url));
     }

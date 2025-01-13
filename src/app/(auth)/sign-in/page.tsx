@@ -103,7 +103,7 @@ const SignInForm: React.FC = () => {
       </button>
 
       {/* Add the "Don't have an account" section */}
-      <div className="text-center mt-4">
+      {/* <div className="text-center mt-4">
         <p className="text-sm text-gray-600">
           Don’t have an account?{" "}
           <Link
@@ -113,7 +113,7 @@ const SignInForm: React.FC = () => {
             Sign up
           </Link>
         </p>
-      </div>
+      </div> */}
     </form>
   );
 };
