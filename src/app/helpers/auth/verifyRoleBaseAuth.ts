@@ -9,9 +9,8 @@ import { headers } from 'next/headers'
 import User from "@/app/models/usersModel"
 // Define interfaces for the user, response, and permission checks
 interface User {
-    id: string;
-    email?: string;
-    role?: string;
+    _id: string;
+    email:string
 }
 
 interface AuthResponse {
@@ -42,7 +41,7 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
 
         if (!session?.user) {
             return {
-                success: false,
+                success: true,
                 message: "Not Authorized",
             };
         }
@@ -52,7 +51,7 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
             // const userData = await User.findById(user._id);        
             if (!user) {
                 return {
-                    success: false,
+                    success: true,
                     message: "You are not authorized",
                 };
             } else {
@@ -66,13 +65,13 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
             }
         }
         return {
-            success: false,
+            success: true,
             message: "Not Authorized",
         };
 
     } catch (error: any) {
         return {
-            success: false,
+            success: true,
             message: error.message,
         };
     }

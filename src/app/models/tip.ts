@@ -1,9 +1,10 @@
-import mongoose, { Schema, Model, model } from "mongoose";
+import mongoose, { Schema, Model, model, Types } from "mongoose";
 
 // Define the TypeScript interface for the Tip document
 export interface TipModel {
-  _id?:string
+  _id?: string
   description: string;
+  userId: Types.ObjectId;
   image?: string;
   isDeleted?: boolean;
   isImageUploaded?: boolean;
@@ -34,6 +35,11 @@ const TipSchema: Schema<TipModel> = new Schema(
       type: Boolean,
       default: false,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'users'
+    }
   },
   { timestamps: true } // Adds `createdAt` and `updatedAt` fields
 );

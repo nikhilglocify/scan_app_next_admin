@@ -11,6 +11,7 @@ import { generateFileKey, uploadFileToLocal, uploadFileToS3 } from "@/app/helper
 // import connect from "@/app/dbConfig/connect";
 import { getStore } from "@netlify/blobs";
 import { authMiddleware } from "@/app/helpers/auth/verifyRoleBaseAuth";
+import mongoose from "mongoose";
 const store = getStore({
   name: 'scan_app_tip_blob',
   siteID: process.env.NETLIFY_SITE_ID,
@@ -23,6 +24,7 @@ export async function POST(request: NextRequest) {
 
     await connect()
     const { user, success, message } = await authMiddleware(request)
+    console.log("user",user)
 
     if (!success) {
 
@@ -49,6 +51,7 @@ export async function POST(request: NextRequest) {
     const tipObj: TipModel = {
       description: formBody?.description,
       date: formBody?.date,
+      userId:new mongoose.Types.ObjectId(user?._id)
     }
 
 
@@ -97,7 +100,7 @@ export async function PUT(request: NextRequest) {
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
 
-    let tipObj: TipModel = {
+    let tipObj:Partial<TipModel> = {
       description: formBody?.description,
       date: formBody?.date,
     }
@@ -133,7 +136,7 @@ export async function GET(request: NextRequest) {
   try {
     await connect()
     const { user, success, message } = await authMiddleware(request)
-    console.log("success",success)
+    
 
     if (!success) {
       
