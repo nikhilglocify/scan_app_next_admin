@@ -9,10 +9,10 @@ const s3 = new AWS.S3({
 });
 
 export async function uploadFileToLocal(file: File, id: string) {
-  console.log("running  uploadFileToLocal",{file,id})
+  
     const uploadDir = path.join(process.cwd(), "uploads");
 
-    console.log("upload dir",uploadDir)
+    
     
     const fileName = `${id}_${file.name}`;
     const filePath = path.join(uploadDir, fileName);
