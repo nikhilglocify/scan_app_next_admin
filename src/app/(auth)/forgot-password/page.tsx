@@ -4,24 +4,30 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { forgotPassword } from "@/app/appApi/Password";
 import toast from "react-hot-toast";
+import Loader from "@/app/components/global/loader";
+import { routeConstants } from "@/app/helpers/contants";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [loading,setLoading]=useState(false)
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setLoading(true)
       await forgotPassword({ email });
 
   
       setMessage("Check your inbox for a reset link.");
-      setTimeout(() => router.push("/sign-in"), 3000); 
+      setTimeout(() => router.push(routeConstants.SIGN_IN), 2000); 
       
     } catch (error:any) {
       
       toast.error(error.message||"Something went wrong.")
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -46,7 +52,8 @@ const ForgotPassword = () => {
             type="submit"
             className="w-full bg-orange-600 text-white py-2 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
           >
-            Send Reset Link
+            {loading ? <Loader message={"Sending Link...."} /> : "Send Reset Link"}
+            
           </button>
         </form>
         {message && (
