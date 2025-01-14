@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
 
 
       console.log("No Tip for the day sending the last availabe")
+      
     }
 
 
