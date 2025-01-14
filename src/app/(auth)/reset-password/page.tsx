@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPassword } from "@/app/appApi/Password";
 import toast from "react-hot-toast";
@@ -13,7 +13,7 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
   const router = useRouter();
-  const searchParams = useSearchParams(); // Use this to access query parameters
+  const searchParams = useSearchParams(); 
 
   const token = searchParams.get("token"); // Extra
 
@@ -90,6 +90,17 @@ const ResetPassword = () => {
       </div>
     </div>
   );
+
+  
 };
 
-export default ResetPassword;
+// Wrap ResetPassword component in Suspense
+const ResetPasswordPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPassword />
+    </Suspense>
+  );
+};
+
+export default ResetPasswordPage
