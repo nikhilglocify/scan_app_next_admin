@@ -5,7 +5,7 @@ import bcryptjs from "bcryptjs";
 // import connect from "@/app/config/dbConfig"
 import { badRequest, successResponseWithData } from "@/app/helpers/apiResponses"
 import  connect  from '@/app/dbConfig/connect';
-import User from "@/app/models/UsersModel"
+import User, { UserModel } from "@/app/models/UsersModel"
 /**
  * This function handles the POST request for user registration.
  * It receives a NextRequest object, validates the request body, checks if the user already exists,
@@ -45,9 +45,8 @@ export async function POST(request: NextRequest) {
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
 
-        const newUser = {
-            name,
-            email,
+        const newUser:UserModel = {
+            email:String(email).toLocaleLowerCase(),
             password: hashedPassword,
         };
 

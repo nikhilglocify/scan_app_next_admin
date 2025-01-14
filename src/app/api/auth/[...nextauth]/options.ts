@@ -17,7 +17,8 @@ export const authOptions: NextAuthOptions = {
         
         await connect()
         try {
-          const user = await User.findOne( { email: credentials.identifier });
+          const email=String(credentials.identifier).toLocaleLowerCase()
+          const user = await User.findOne( { email:email });
           if (!user) {
             throw new Error('No user found with this email');
           }
