@@ -63,7 +63,7 @@ export const ediTipSchema = z.object({
         return validExtensions.includes(file.type); // Check MIME type
       },
       {
-        message: "Only valid image files (JPEG, PNG, ,JPG, WEBP) are allowed.",
+        message: "Only valid image files (JPEG, PNG, JPG, WEBP) are allowed.",
       }
     ).optional(),
 
