@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
-import { TipModel } from "@/app/models/tip";
+import { TipModel } from "@/app/models/Tip";
 import { generateClientS3Url } from "@/app/helpers/utils";
 import { useEffect, useState } from "react";
 import { getBlob } from "@/app/appApi/Tip";

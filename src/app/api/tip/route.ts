@@ -4,7 +4,7 @@ import bcryptjs from "bcryptjs";
 // import connect from "@/app/config/dbConfig"
 import { badRequest, successResponseWithData, unauthorizedError } from "@/app/helpers/apiResponses"
 import connect from '@/app/dbConfig/connect';
-import Tip, { TipModel } from "@/app/models/tip"
+import Tip, { TipModel } from "@/app/models/Tip"
 import { ReqBodyValidationresponse, validateBodyData } from "@/app/helpers/validation/requestBodyValiation";
 import { ediTipSchema, tipSchema } from "@/app/schemas/tipSchema";
 import { generateFileKey, uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUpload";

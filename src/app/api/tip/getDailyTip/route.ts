@@ -4,7 +4,7 @@ import bcryptjs from "bcryptjs";
 // import connect from "@/app/config/dbConfig"
 import { badRequest, successResponseWithData, unauthorizedError } from "@/app/helpers/apiResponses"
 import connect from '@/app/dbConfig/connect';
-import Tip, { TipModel } from "@/app/models/tip"
+import Tip, { TipModel } from "@/app/models/Tip"
 import { authMiddleware } from "@/app/helpers/auth/verifyRoleBaseAuth";
 
 
