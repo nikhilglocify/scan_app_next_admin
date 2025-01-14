@@ -13,11 +13,11 @@ export const tipSchema = z.object({
       (file) => {
         if (!(file instanceof File)) return false; // Ensure it's a file object
   
-        const validExtensions = ["image/jpeg", "image/png", "image/gif", "image/webp","image/jpg", "image/heic"];
+        const validExtensions = ["image/jpeg", "image/png", "image/webp","image/jpg", "image/heic"];
         return validExtensions.includes(file.type); // Check MIME type
       },
       {
-        message: "Only valid image files (JPEG, PNG, GIF, WEBP) are allowed.",
+        message: "Only valid image files (JPEG, PNG,JPG, WEBP) are allowed.",
       }
     ),
 
@@ -59,11 +59,11 @@ export const ediTipSchema = z.object({
       (file) => {
         if (!(file instanceof File)) return false; // Ensure it's a file object
   
-        const validExtensions = ["image/jpeg", "image/png", "image/gif", "image/webp","image/jpg", "image/heic"];
+        const validExtensions = ["image/jpeg", "image/png", "image/webp","image/jpg", "image/heic"];
         return validExtensions.includes(file.type); // Check MIME type
       },
       {
-        message: "Only valid image files (JPEG, PNG, GIF, WEBP) are allowed.",
+        message: "Only valid image files (JPEG, PNG, ,JPG, WEBP) are allowed.",
       }
     ).optional(),
 
