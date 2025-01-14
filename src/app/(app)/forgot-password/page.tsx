@@ -17,7 +17,7 @@ const ForgotPassword = () => {
 
   
       setMessage("Check your inbox for a reset link.");
-      setTimeout(() => router.push("/sign-in"), 3000); // Redirect after 3 seconds
+      setTimeout(() => router.push("/sign-in"), 3000); 
       
     } catch (error:any) {
       
