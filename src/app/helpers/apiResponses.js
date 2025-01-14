@@ -44,15 +44,18 @@ export async function successResponseWithData(
   );
 }
 
-export async function unauthorizedError(res, message="Unauthorized") {
-  return (
-    res.json({
-      message,
-      success,
-      statusCode: 401,
-    }),
+
+
+export async function unauthorizedError(res, message) {
+  return res.json(
     {
-      status: 401,
+      message,
+      statusCode: 400,
+      success:false,
+      
+    },
+    {
+      status: 400,
     }
   );
 }
@@ -62,7 +65,7 @@ export async function badRequest(res, message,errors) {
     {
       message,
       statusCode: 400,
-      status:false,
+      success:false,
       errors
     },
     {

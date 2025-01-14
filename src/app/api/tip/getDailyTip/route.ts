@@ -2,15 +2,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 // import connect from "@/app/config/dbConfig"
-import { badRequest, successResponseWithData } from "@/app/helpers/apiResponses"
+import { badRequest, successResponseWithData, unauthorizedError } from "@/app/helpers/apiResponses"
 import connect from '@/app/dbConfig/connect';
 import Tip, { TipModel } from "@/app/models/tip"
+import { authMiddleware } from "@/app/helpers/auth/verifyRoleBaseAuth";
 
 
 export async function GET(request: NextRequest) {
 
   try {
     await connect()
+    const { user, success, message } = await authMiddleware(request)
+
+    if (!success) {
+
+      return unauthorizedError(NextResponse, message || "Not Authorized")
+    }
 
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -22,16 +29,13 @@ export async function GET(request: NextRequest) {
       date: { $gte: startOfDay, $lt: endOfDay },
     }).sort({ date: 'desc', updatedAt: "desc", createdAt: "desc" }).lean();
 
-    if (tip) {
-      console.log("Today's tip found", tip)
-    } else {
-
+    if (!tip) {
       tip = await Tip.findOne({
         date: { $lt: endOfDay },
       }).sort({ date: 'desc', updatedAt: "desc", createdAt: "desc" }).lean();
 
 
-      console.log("No Tip for the day sending the availabe")
+      console.log("No Tip for the day sending the last availabe")
     }
 
 

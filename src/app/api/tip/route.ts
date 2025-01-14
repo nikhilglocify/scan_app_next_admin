@@ -110,7 +110,6 @@ export async function PUT(request: NextRequest) {
       // await store.set(file_key, image);
 
       const file_key = await uploadFileToS3(image as any, formBody._id)
-      console.log("filePath", file_key)
       await Tip.findByIdAndUpdate(formBody._id, { ...tipObj, isImageUploaded: true, image: file_key })
     } else {
 
@@ -134,9 +133,10 @@ export async function GET(request: NextRequest) {
   try {
     await connect()
     const { user, success, message } = await authMiddleware(request)
+    console.log("success",success)
 
     if (!success) {
-
+      
       return unauthorizedError(NextResponse, message || "Not Authorized")
     }
 
