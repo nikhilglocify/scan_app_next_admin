@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs'
 import connect from '@/app/dbConfig/connect';
 import PasswordReset from '@/app/models/PasswordReset';;
 import User from "@/app/models/UsersModel"
+import { badRequest, successResponseWithMessage } from '@/app/helpers/apiResponses';
 
 
 export async function POST(req: Request) {
@@ -10,26 +11,25 @@ export async function POST(req: Request) {
   await connect();
 
   try {
-    console.log("token",token)
-    const resetRecord = await PasswordReset.findOne({ token }).lean();
-    console.log(resetRecord,"resetRecord",password)
 
-    if (!resetRecord || resetRecord.expiresAt < new Date() || resetRecord?.isTokenUsed) {
-      return NextResponse.json({ error: 'Token is invalid or expired.' }, { status: 400 });
+    const resetRecord = await PasswordReset.findOne({ token }).lean();
+    
+
+    if (!resetRecord || resetRecord.expiresAt < new Date()) {
+      return badRequest(NextResponse,"Token is invalid or expired")
     }
 
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
-    console.log("hashedPassword",hashedPassword,resetRecord.userId)
-    // Update the user's password
+   
     await User.findByIdAndUpdate(resetRecord.userId, { password: hashedPassword});
 
     // Delete the token
-    // await PasswordReset.deleteOne({ _id: resetRecord._id });
+    await PasswordReset.deleteOne({ _id: resetRecord._id });
 
-    return NextResponse.json({ message: 'Password reset successful.' });
+    return successResponseWithMessage(NextResponse,'Password reset successful.')
   } catch (error:any) {
     console.log("error",error?.message)
-    return NextResponse.json({ error: 'An error occurred.' }, { status: 500 });
+    return badRequest(NextResponse,'An error occurred.')
   }
 }

@@ -4,6 +4,7 @@ import PasswordReset from '@/app/models/PasswordReset';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import User from "@/app/models/UsersModel"
+import { badRequest, successResponseWithMessage } from '@/app/helpers/apiResponses';
 
 export async function POST(req: Request) {
   const { email } = await req.json();
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: 'Email not found.' }, { status: 404 });
+      return badRequest(NextResponse,"user not found")
     }
 
     // Generate a reset token
@@ -46,9 +47,9 @@ export async function POST(req: Request) {
 
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ message: 'Reset link sent to your email.' });
+    return successResponseWithMessage(NextResponse,"Reset link sent to your email.")
   } catch (error:any) {
     console.log("error",error.message)
-    return NextResponse.json({ error: 'An error occurred.' }, { status: 500 });
+    return badRequest(NextResponse,"An error occurred.")
   }
 }
