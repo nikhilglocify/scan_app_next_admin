@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 import connect from "@/app/dbConfig/connect"
 import { headers } from 'next/headers'
 
-import User from "@/app/models/usersModel"
+import User from "@/app/models/UsersModel"
 // Define interfaces for the user, response, and permission checks
 interface User {
     _id: string;

@@ -32,7 +32,7 @@ const SignInForm: React.FC = () => {
         identifier: data.email,
         password: data.password,
       });
-      console.log("Result",result)
+      
       if (result?.ok) {
         toast.success("User signed in successfully");
         router.push(routeConstants.DASHBOARD);
@@ -105,7 +105,7 @@ const SignInForm: React.FC = () => {
         {loading ? <Loader message={"Signing in ...."} /> : "Sign In"}
       </button>
 
-      {/* Add the "Don't have an account" section */}
+      {/*  "Don't have an account" section */}
       {/* <div className="text-center mt-4">
         <p className="text-sm text-gray-600">
           Don’t have an account?{" "}
@@ -117,6 +117,19 @@ const SignInForm: React.FC = () => {
           </Link>
         </p>
       </div> */}
+
+      {/* Forgot password section */}
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-600">
+          {/* Don’t have an account?{" "} */}
+          <Link
+            href={routeConstants.FORGOT_PASSWORD}
+            className="text-orange-600 hover:text-orange-500"
+          >
+            Forgotten Password?
+          </Link>
+        </p>
+      </div>
     </form>
   );
 };

@@ -4,27 +4,20 @@ import bcryptjs from "bcryptjs";
 // import connect from "@/app/config/dbConfig"
 import { badRequest, successResponseWithData, unauthorizedError } from "@/app/helpers/apiResponses"
 import connect from '@/app/dbConfig/connect';
-import Tip, { TipModel } from "@/app/models/tip"
+import Tip, { TipModel } from "@/app/models/Tip"
 import { ReqBodyValidationresponse, validateBodyData } from "@/app/helpers/validation/requestBodyValiation";
 import { ediTipSchema, tipSchema } from "@/app/schemas/tipSchema";
 import { generateFileKey, uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUpload";
-// import connect from "@/app/dbConfig/connect";
-import { getStore } from "@netlify/blobs";
 import { authMiddleware } from "@/app/helpers/auth/verifyRoleBaseAuth";
 import mongoose from "mongoose";
-const store = getStore({
-  name: 'scan_app_tip_blob',
-  siteID: process.env.NETLIFY_SITE_ID,
-  token: process.env.NETLIFY_BLOB_TOKEN,
-  consistency: "strong"
-})
+
 
 export async function POST(request: NextRequest) {
   try {
 
     await connect()
     const { user, success, message } = await authMiddleware(request)
-    console.log("user",user)
+    
 
     if (!success) {
 

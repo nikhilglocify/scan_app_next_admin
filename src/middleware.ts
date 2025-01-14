@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl;
 
   // Define paths that bypass authentication
-  const bypassAuthPaths = ['/sign-in', '/verify'];
+  const bypassAuthPaths = ['/sign-in','/forgot-password','/reset-password'];
   const disbaledPaths=['/sign-up']
   const isDisabledPath = disbaledPaths.some((path) => url.pathname.startsWith(path));
   
@@ -24,7 +24,9 @@ export async function middleware(request: NextRequest) {
     token &&
     (url.pathname.startsWith('/sign-in') ||
       url.pathname.startsWith('/sign-up') ||
-      url.pathname.startsWith('/verify') ||
+      url.pathname.startsWith('/forgot-password') ||
+      url.pathname.startsWith('/reset-password') ||
+      
       url.pathname === '/')
   ) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
