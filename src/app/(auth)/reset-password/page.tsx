@@ -6,12 +6,14 @@ import { resetPassword } from "@/app/appApi/Password";
 import toast from "react-hot-toast";
 import { routeConstants } from "@/app/helpers/contants";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import Loader from "@/app/components/global/loader";
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
+  const [loading,setLoading]=useState(false)
   const router = useRouter();
   const searchParams = useSearchParams(); 
 
@@ -28,11 +30,14 @@ const ResetPassword = () => {
     }
 
     try {
+      setLoading(true)
       await resetPassword({ token, password });
       setMessage("Your password has been reset!");
       setTimeout(() => router.push(routeConstants.SIGN_IN), 1000);
     } catch (error: any) {
       toast.error(error.message || "Something went wrong.");
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -83,10 +88,11 @@ const ResetPassword = () => {
             type="submit"
             className="w-full bg-orange-600 text-white py-2 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
           >
-            Reset Password
+            {loading ? <Loader message={"Resetting Password...."} /> : "Reset Password"}
+            
           </button>
         </form>
-        {message && <p className="mt-4 text-center text-sm text-red-600">{message}</p>}
+        {message && <p className="mt-4 text-center text-sm text-green-600">{message}</p>}
       </div>
     </div>
   );
