@@ -44,7 +44,7 @@ export async function successResponseWithData(
   );
 }
 
-export async function unauthorizedError(res, message) {
+export async function unauthorizedError(res, message="Unauthorized") {
   return (
     res.json({
       message,

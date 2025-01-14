@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 // import connect from "@/app/config/dbConfig"
-import { badRequest, successResponseWithData } from "@/app/helpers/apiResponses"
+import { badRequest, successResponseWithData, unauthorizedError } from "@/app/helpers/apiResponses"
 import connect from '@/app/dbConfig/connect';
 import Tip, { TipModel } from "@/app/models/tip"
 import { ReqBodyValidationresponse, validateBodyData } from "@/app/helpers/validation/requestBodyValiation";
@@ -10,6 +10,7 @@ import { ediTipSchema, tipSchema } from "@/app/schemas/tipSchema";
 import { generateFileKey, uploadFileToLocal, uploadFileToS3 } from "@/app/helpers/upload/fileUpload";
 // import connect from "@/app/dbConfig/connect";
 import { getStore } from "@netlify/blobs";
+import { authMiddleware } from "@/app/helpers/auth/verifyRoleBaseAuth";
 const store = getStore({
   name: 'scan_app_tip_blob',
   siteID: process.env.NETLIFY_SITE_ID,
@@ -21,6 +22,12 @@ export async function POST(request: NextRequest) {
   try {
 
     await connect()
+    const { user, success, message } = await authMiddleware(request)
+
+    if (!success) {
+
+      return unauthorizedError(NextResponse, message || "Not Authorized")
+    }
 
     const formData = await request.formData();
     let formPayload = Object.fromEntries(formData);
@@ -72,6 +79,12 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     await connect()
+    const { user, success, message } = await authMiddleware(request)
+
+    if (!success) {
+
+      return unauthorizedError(NextResponse, message || "Not Authorized")
+    }
     const formData = await request.formData();
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
@@ -120,6 +133,12 @@ export async function GET(request: NextRequest) {
 
   try {
     await connect()
+    const { user, success, message } = await authMiddleware(request)
+
+    if (!success) {
+
+      return unauthorizedError(NextResponse, message || "Not Authorized")
+    }
 
     const tips = await Tip.find().sort({ date: 'desc' })
 
