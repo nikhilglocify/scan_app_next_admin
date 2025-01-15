@@ -39,8 +39,10 @@ export async function GET(request: NextRequest) {
       
     }
 
+    console.log("TIp Data",tip)
 
-    return successResponseWithData(NextResponse, "successfully fetched Tips", tip!)
+
+    return successResponseWithData(NextResponse, "successfully fetched Tips", tip||{})
 
   } catch (error: any) {
 
