@@ -6,7 +6,7 @@ import { SignInFormData, signInSchema } from "@/app/schemas/signInSchema";
 import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Loader from "@/app/components/global/loader";
+import Loader from "@/components/global/loader";
 import Link from "next/link"; // Add this import
 import { routeConstants } from "@/app/helpers/contants";
 
