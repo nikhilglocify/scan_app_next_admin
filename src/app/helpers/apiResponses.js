@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 
 
 export async function successResponseWithMessage(res, status, statusCode,message) {
@@ -31,17 +32,16 @@ export async function successResponseWithData(
   message,
   data = {}
 ) {
-  return res.json(
-    {
-      message,
-      statusCode: 200,
-      success:true,
-      data,
-    },
-    {
-      status: 200,
-    }
-  );
+  const response = NextResponse.json({
+    message,
+    statusCode: 200,
+    success: true,
+    data,
+  });
+
+  response.headers.set('Cache-Control', 'no-store'); // Set header using NextResponse
+
+  return response;
 }
 
 
