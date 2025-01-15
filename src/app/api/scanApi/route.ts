@@ -9,13 +9,9 @@ export async function GET(request: NextRequest) {
         await connect()
 
 
-        const data = {
-            url: [
-                "abc"
-            ]
-        }
+        
 
-        return successResponseWithData(NextResponse, "Book fetched successfully", data)
+        return successResponseWithData(NextResponse, "server working")
 
 
 

@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
   try {
     await connect()
     const { user, success, message } = await authMiddleware(request)
-
     if (!success) {
 
       return unauthorizedError(NextResponse, message || "Not Authorized")
