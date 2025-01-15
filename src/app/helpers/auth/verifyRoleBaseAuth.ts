@@ -32,6 +32,7 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
         const session = await getServerSession(authOptions);
         const headersList = await headers()
         const appToken = headersList.get('appToken')
+        console.log("appToken",appToken,process.env.APP_TOKEN_SECRET)
         if(appToken==process.env.APP_TOKEN_SECRET){
             return {
                 success:true,
@@ -41,17 +42,18 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
 
         if (!session?.user) {
             return {
-                success: true,
+                success: false,
                 message: "Not Authorized",
             };
         }
 
         const { user } = session
         if (user) {
+            console.log("got user next auth",user)
             // const userData = await User.findById(user._id);        
             if (!user) {
                 return {
-                    success: true,
+                    success: false,
                     message: "You are not authorized",
                 };
             } else {
@@ -65,14 +67,14 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
             }
         }
         return {
-            success: true,
+            success: false,
             message: "Not Authorized",
         };
 
     } catch (error: any) {
         return {
-            success: true,
-            message: error.message,
+            success: false,
+            message: error.message || "Not Authorized",
         };
     }
 }

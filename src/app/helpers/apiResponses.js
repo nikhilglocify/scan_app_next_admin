@@ -50,12 +50,12 @@ export async function unauthorizedError(res, message) {
   return res.json(
     {
       message,
-      statusCode: 400,
+      statusCode: 401,
       success:false,
       
     },
     {
-      status: 400,
+      status: 401,
     }
   );
 }
