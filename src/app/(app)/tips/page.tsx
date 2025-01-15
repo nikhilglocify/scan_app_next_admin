@@ -1,8 +1,8 @@
 "use client";
 import { getTips } from "@/app/appApi/Tip";
-import Loader from "@/app/components/global/loader";
-import AddTipModal from "@/app/components/tips/AddTipModal";
-import TipCard from "@/app/components/tips/TipCard";
+import Loader from "@/components/global/loader";
+import AddTipModal from "@/components/Tip/AddTipModal";
+import TipCard from "@/components/Tip/TipCard";
 import { TipModel } from "@/app/models/Tip";
 import { Button } from "@/components/ui/button";
 import { useForm, Controller, FormProvider } from "react-hook-form";

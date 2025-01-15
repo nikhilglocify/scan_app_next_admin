@@ -6,7 +6,7 @@ import { resetPassword } from "@/app/appApi/Password";
 import toast from "react-hot-toast";
 import { routeConstants } from "@/app/helpers/contants";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import Loader from "@/app/components/global/loader";
+import Loader from "@/components/global/loader";
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

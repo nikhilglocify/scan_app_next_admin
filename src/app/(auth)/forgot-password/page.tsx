@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { forgotPassword } from "@/app/appApi/Password";
 import toast from "react-hot-toast";
-import Loader from "@/app/components/global/loader";
+import Loader from "@/components/global/loader";
 import { routeConstants } from "@/app/helpers/contants";
 
 const ForgotPassword = () => {

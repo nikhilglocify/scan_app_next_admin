@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import React, { useState } from "react";
-import Navbar from "@/app/components/layout/Navbar";
+import Navbar from "@/components/layout/Navbar";
 
 
 
