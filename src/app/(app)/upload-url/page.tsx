@@ -16,7 +16,7 @@ export default function UploadJson() {
 
   const uploadFile = async () => {
     if (!file) {
-      alert("Please select a file to upload.");
+        toast.error("Please select a file to upload.");
       return;
     }
 
@@ -30,39 +30,22 @@ export default function UploadJson() {
     } finally {
       setUploading(false);
     }
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("file", file);
-
-    //   const response = await fetch("/api/upload-json", {
-    //     method: "POST",
-    //     body: formData,
-    //   });
-
-    //   if (!response.ok) {
-    //     console.log("Error response",response)
-    //     throw new Error("Failed to upload file");
-    //   }
-
-    //   const data = await response.json();
-    //   alert(`File uploaded successfully! S3 Key: ${data.key}`);
-    // } catch (error) {
-    //   console.error("Error uploading file:", error);
-    //   alert("Error uploading file.");
-    // } finally {
-    //   setUploading(false);
-    // }
   };
 
   return (
-    <div>
-      <h1>Upload JSON File</h1>
+    <div className="flex flex-col items-center space-y-4 p-6 bg-gray-100 rounded-lg shadow-md max-w-sm mx-auto">
+      <h1 className="text-2xl font-semibold text-gray-800">Upload  JSON File</h1>
       <input
         type="file"
         accept="application/json"
         onChange={handleFileChange}
+        className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
       />
-      <button onClick={uploadFile} disabled={uploading}>
+      <button
+        onClick={uploadFile}
+        disabled={uploading}
+        className="w-full p-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-orange-500"
+      >
         {uploading ? "Uploading..." : "Upload"}
       </button>
     </div>
