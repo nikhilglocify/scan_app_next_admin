@@ -185,10 +185,10 @@ export async function GET(req: NextRequest) {
         };
 
         const fileContent = await streamToString(data.Body as Readable);
-
+      console.log("sitesToVisit",sitesToVisit)
         // Parse the JSON content from the file
         const jsonData = JSON.parse(fileContent);
-        const urls = getUrls(jsonData?.term, Number(sitesToVisit) || 5)
+        const urls = getUrls(jsonData?.term, Number(sitesToVisit) )
 
 
         return successResponseWithData(NextResponse, "succesfully fetched urls", urls)
@@ -198,7 +198,8 @@ export async function GET(req: NextRequest) {
 
     }
 }
- const getUrls = (urls: string[], numUrlsToSelect: number) => {
+ const getUrls = (urls: string[], numU: number) => {
+    const numUrlsToSelect = numU?numU:Math.floor(Math.random() * (20 - 5 + 1)) + 5;
     const shuffledUrls = [...urls].sort(() => Math.random() - 0.5);
     return shuffledUrls.slice(0, numUrlsToSelect);
 }
