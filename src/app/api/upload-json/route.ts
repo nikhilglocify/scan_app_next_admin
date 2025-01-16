@@ -4,7 +4,7 @@ import formidable from "formidable";
 import fs from "fs/promises";
 import { Readable } from "stream";
 import { badRequest, serverError, successResponseWithData, unauthorizedError } from "@/app/helpers/apiResponses";
-import { urlFile } from "@/app/helpers/interface"
+import { ExtendedReadable, urlFile } from "@/app/helpers/interface"
 import JsonUpload, { JsonUploadModel } from "@/app/models/JsonUpload"
 import { authMiddleware } from "@/app/helpers/auth/verifyRoleBaseAuth";
 
@@ -21,8 +21,8 @@ export const config = {
     },
 };
 
-// Helper to convert request to Node.js readable stream
-function toNodeReadableStream(request: Request): any {
+
+export function toNodeReadableStream(request: Request): ExtendedReadable {
     const reader = request.body?.getReader();
     const stream = new Readable({
         async read() {
@@ -37,9 +37,9 @@ function toNodeReadableStream(request: Request): any {
                 this.push(value);
             }
         },
-    });
+    }) as ExtendedReadable;
 
-    stream.headers = Object.fromEntries(request.headers.entries()) as any;
+    stream.headers = Object.fromEntries(request.headers.entries());
     stream.method = request.method;
     stream.url = request.url;
 
