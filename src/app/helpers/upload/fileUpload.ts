@@ -5,18 +5,20 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 
 const s3 = new AWS.S3({
-  region: process.env.AWSREGION, // e.g., "us-west-2"
-  accessKeyId: process.env.AWS_ACCESS_KEYID, // Your AWS access key
-  secretAccessKey: process.env.AWS_SECRET_ACCESSKEY, // Your AWS secret key
+  region: process.env.AWSREGION, 
+  accessKeyId: process.env.AWS_ACCESS_KEYID, 
+  secretAccessKey: process.env.AWS_SECRET_ACCESSKEY, 
 });
 
-const s3Client = new S3Client({
-  region: process.env.AWSREGION, // e.g., "us-west-2"
+export const s3Client = new S3Client({
+  region: process.env.AWSREGION, 
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEYID!, // Your AWS access key
-    secretAccessKey: process.env.AWS_SECRET_ACCESSKEY!, // Your AWS secret key
+    accessKeyId: process.env.AWS_ACCESS_KEYID!, 
+    secretAccessKey: process.env.AWS_SECRET_ACCESSKEY!, 
   },
 });
+
+
 
 export async function uploadFileToLocal(file: File, id: string) {
   

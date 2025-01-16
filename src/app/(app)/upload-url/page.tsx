@@ -33,7 +33,7 @@ export default function UploadJson() {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4 p-6 bg-gray-100 rounded-lg shadow-md max-w-sm mx-auto">
+    <div className="flex flex-col items-center space-y-4 p-6 bg-gray-100 rounded-lg shadow-md max-w-sm mx-auto justify-center">
       <h1 className="text-2xl font-semibold text-gray-800">Upload  JSON File</h1>
       <input
         type="file"

@@ -3,18 +3,18 @@ import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3
 import formidable from "formidable";
 import fs from "fs/promises";
 import { Readable } from "stream";
-import { badRequest, successResponseWithData } from "@/app/helpers/apiResponses";
+import { badRequest, serverError, successResponseWithData, unauthorizedError } from "@/app/helpers/apiResponses";
 import { urlFile } from "@/app/helpers/interface"
-// Initialize S3 client
-const s3Client = new S3Client({
-    region: process.env.AWSREGION,
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEYID!,
-        secretAccessKey: process.env.AWS_SECRET_ACCESSKEY!,
-    },
-});
+import JsonUpload, { JsonUploadModel } from "@/app/models/JsonUpload"
+import { authMiddleware } from "@/app/helpers/auth/verifyRoleBaseAuth";
 
-// Disable body parsing
+import connect from '@/app/dbConfig/connect';
+import mongoose from "mongoose";
+import { s3Client } from "@/app/helpers/upload/fileUpload";
+
+
+
+
 export const config = {
     api: {
         bodyParser: false,
@@ -47,14 +47,22 @@ function toNodeReadableStream(request: Request): any {
 }
 
 // POST handler
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     try {
+        await connect()
+        const { user, success, message } = await authMiddleware(request)
+
+
+        if (!success) {
+
+            return unauthorizedError(NextResponse, message || "Not Authorized")
+        }
         const nodeRequest = toNodeReadableStream(request);
 
         const form = formidable({
             multiples: false,
             uploadDir: "/tmp", // Temporary file storage
-            keepExtensions: true, // Keep file extensions
+            keepExtensions: true,
         });
 
         const { files } = await new Promise<{ fields: formidable.Fields; files: formidable.Files }>(
@@ -66,26 +74,25 @@ export async function POST(request: Request) {
             }
         );
 
-        console.log("Files received:", files);
 
-        const file = files.file ? files.file[0] : null; // Handle as an array
+        const file = files.file ? files.file[0] : null;
         if (!file || !file.filepath) {
             console.error("Invalid file object:", file);
             return NextResponse.json({ error: "No file uploaded or invalid file object" }, { status: 400 });
         }
 
-        // const fileContent = await fs.readFile(file.filepath);
+
         const fileName = `uploads/${Date.now()}-${file.originalFilename}`;
 
         // Read the file content
         const fileContent = await fs.readFile(file.filepath, 'utf-8');  // Ensure encoding is 'utf-8'
-
+        const minUrls = 10
         // Validate if the file is valid JSON
         let jsonData;
         try {
             jsonData = JSON.parse(fileContent) as urlFile;
-            if (!jsonData?.term || jsonData?.term.length < 5) {
-                const errorMsg = jsonData?.term?.length < 5 ? "Minimum of 5 urls must be in the json" : "Invalid Url file format term array  not found"
+            if (!jsonData?.term || jsonData?.term.length < minUrls) {
+                const errorMsg = jsonData?.term?.length < minUrls ? `Minimum of ${minUrls} urls must be in the json` : "Invalid Url file format term array  not found"
 
                 return badRequest(NextResponse, errorMsg)
             }
@@ -109,7 +116,24 @@ export async function POST(request: Request) {
             ContentType: "application/json",
         });
 
-        // await s3Client.send(command);
+        await s3Client.send(command);
+
+        const jsonUploadObj: JsonUploadModel = {
+            userId: new mongoose.Types.ObjectId(user?._id),
+            filePath: fileName,
+            type: "json-url"
+
+        }
+
+        const storedJson = await JsonUpload.findOne().sort({ createdAt: "desc" }).lean();
+
+        if (storedJson && storedJson._id) {
+            await JsonUpload.findByIdAndUpdate(storedJson._id, jsonUploadObj)
+        } else {
+            await JsonUpload.create(jsonUploadObj)
+        }
+
+
 
         return NextResponse.json({ message: "File uploaded successfully", key: fileName });
     } catch (error) {
@@ -120,23 +144,35 @@ export async function POST(request: Request) {
 
 export async function GET(req: NextRequest) {
     const { searchParams } = req.nextUrl;
-    const fileKey = searchParams.get('fileKey'); // Get fileKey from query params
     const sitesToVisit = searchParams.get('sitesToVisit')
-
-
-
-    if (!fileKey) {
-        return NextResponse.json({ error: 'File key is required' }, { status: 400 });
-    }
-
     try {
+
+        await connect()
+        const { user, success, message } = await authMiddleware(req)
+
+
+        if (!success) {
+
+            return unauthorizedError(NextResponse, message || "Not Authorized")
+        }
+        const storedJson = await JsonUpload.findOne
+            ({ filePath: { $ne: null } }).sort({ createdAt: "desc" }).lean();
+
+        if (!storedJson) {
+            return badRequest(NextResponse, "stored Json for the url not found")
+        }
         // Fetch file from S3
         const command = new GetObjectCommand({
             Bucket: process.env.S3_BUCKET_NAME!,
-            Key: fileKey,
+            Key: String(storedJson?.filePath),
         });
 
         const data = await s3Client.send(command);
+
+        if (!data) {
+            return badRequest(NextResponse, "stored Json not found from the cloud")
+
+        }
 
         // Read the S3 object data into a buffer
         const streamToString = (stream: Readable) => {
@@ -154,11 +190,12 @@ export async function GET(req: NextRequest) {
         const jsonData = JSON.parse(fileContent);
         const urls = getUrls(jsonData?.term, Number(sitesToVisit) || 5)
 
-        // Send the JSON data as a response
+
         return successResponseWithData(NextResponse, "succesfully fetched urls", urls)
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error retrieving file from S3:', error);
-        return NextResponse.json({ error: 'Error retrieving file from S3' }, { status: 500 });
+        return serverError(NextResponse, error.message || 'Error retrieving file from S3')
+
     }
 }
 export const getUrls = (urls: string[], numUrlsToSelect: number) => {
