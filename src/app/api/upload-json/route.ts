@@ -22,7 +22,7 @@ export const config = {
 };
 
 
-export function toNodeReadableStream(request: Request): ExtendedReadable {
+ function toNodeReadableStream(request: Request): ExtendedReadable {
     const reader = request.body?.getReader();
     const stream = new Readable({
         async read() {
