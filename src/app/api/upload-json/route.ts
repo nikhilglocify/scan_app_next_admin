@@ -198,7 +198,7 @@ export async function GET(req: NextRequest) {
 
     }
 }
-export const getUrls = (urls: string[], numUrlsToSelect: number) => {
+ const getUrls = (urls: string[], numUrlsToSelect: number) => {
     const shuffledUrls = [...urls].sort(() => Math.random() - 0.5);
     return shuffledUrls.slice(0, numUrlsToSelect);
 }
