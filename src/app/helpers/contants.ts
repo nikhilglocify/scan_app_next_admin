@@ -16,6 +16,12 @@ export const navBarFields: MenuItem[] = [
 
     ], showDropdown: false
   },
+  {
+    name: "Upload", route: "/upload-url/", dropdownOptions: [
+
+
+    ], showDropdown: false
+  },
   // {
   //   name: "upload",
   //   route: "/video/upload",
