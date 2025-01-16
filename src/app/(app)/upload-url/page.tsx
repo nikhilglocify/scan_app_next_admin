@@ -1,6 +1,8 @@
-"use client"
+"use client";
 
+import { uplodJsonUrl } from "@/app/appApi/JsonUpload";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function UploadJson() {
   const [file, setFile] = useState<File | null>(null);
@@ -21,32 +23,45 @@ export default function UploadJson() {
     setUploading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await fetch("/api/upload-json", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload file");
-      }
-
-      const data = await response.json();
-      alert(`File uploaded successfully! S3 Key: ${data.key}`);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      alert("Error uploading file.");
+      await uplodJsonUrl(file);
+      toast.success("file uploaded successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to upload file");
     } finally {
       setUploading(false);
     }
+    // try {
+    //   const formData = new FormData();
+    //   formData.append("file", file);
+
+    //   const response = await fetch("/api/upload-json", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
+
+    //   if (!response.ok) {
+    //     console.log("Error response",response)
+    //     throw new Error("Failed to upload file");
+    //   }
+
+    //   const data = await response.json();
+    //   alert(`File uploaded successfully! S3 Key: ${data.key}`);
+    // } catch (error) {
+    //   console.error("Error uploading file:", error);
+    //   alert("Error uploading file.");
+    // } finally {
+    //   setUploading(false);
+    // }
   };
 
   return (
     <div>
       <h1>Upload JSON File</h1>
-      <input type="file" accept="application/json" onChange={handleFileChange} />
+      <input
+        type="file"
+        accept="application/json"
+        onChange={handleFileChange}
+      />
       <button onClick={uploadFile} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload"}
       </button>
