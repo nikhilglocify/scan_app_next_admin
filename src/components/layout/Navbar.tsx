@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
 
     await signOut({
-      callbackUrl:"https://subtle-fox-bdcd12.netlify.app/sign-in",
+      callbackUrl:`${process.env.NEXTAUTH_URL}/sign-in`,
       redirect:true
     });
     
