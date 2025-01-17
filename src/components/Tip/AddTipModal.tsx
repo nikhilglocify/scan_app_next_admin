@@ -178,21 +178,7 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
                     />
                   </div>
                 )}
-                {/* Image Preview */}
-                {/* {imagePreview ||
-                (isEdit && (
-                  <div className="mt-2">
-                    <img
-                      src={
-                         imagePreview
-                          ? imagePreview
-                          : "https://png.pngtree.com/png-vector/20220305/ourmid/pngtree-quick-tips-vector-ilustration-in-flat-style-png-image_4479926.png"
-                      }
-                      alt="Preview"
-                      className="w-full h-auto max-h-48 object-contain border rounded-md"
-                    />
-                  </div>
-                ))} */}
+                
                 {errors.image && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.image.message as any}

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { navBarFields } from "@/app/helpers/contants";
 import { signOut } from "next-auth/react";
-import appLogo  from "@/assets/images/app_logo.png"
+import appLogo from "@/assets/images/app_logo.png";
 import Image from "next/image";
 
 const Navbar: React.FC = () => {
@@ -35,19 +35,16 @@ const Navbar: React.FC = () => {
     const updatedMenu = [...navBarMenu];
     updatedMenu[idx].showDropdown = isDropdown;
     setNavBarMenu(updatedMenu);
-
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
   const handleLogout = async () => {
-
     await signOut({
-      callbackUrl:"https://subtle-fox-bdcd12.netlify.app/sign-in",
-      redirect:true
+      callbackUrl: `${process.env.NEXTAUTH_URL}/sign-in`,
+      redirect: true,
     });
-    
   };
 
   return (

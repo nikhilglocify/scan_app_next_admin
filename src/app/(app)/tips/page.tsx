@@ -1,5 +1,5 @@
 "use client";
-import { getTips } from "@/app/appApi/Tip";
+import { deleteTip, getTips } from "@/app/appApi/Tip";
 import Loader from "@/components/global/loader";
 import AddTipModal from "@/components/Tip/AddTipModal";
 import TipCard from "@/components/Tip/TipCard";
@@ -15,6 +15,10 @@ import {
   tipSchema,
 } from "@/app/schemas/tipSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
+import { DeleteConfirmation } from "@/components/global/DeleteConfirmation";
+import toast from "react-hot-toast";
 
 function page() {
   const router = useRouter();
@@ -24,6 +28,8 @@ function page() {
   const [isEdit, setIsEdit] = useState(false);
   const [open, setOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
 
   const fetchDailyTip = async () => {
     try {
@@ -64,6 +70,27 @@ function page() {
     });
   };
 
+  const handleDelete = (id: string) => {
+    setDeleteId(id);
+    console.log("delete", id);
+    setOpenAlert(true);
+  };
+  
+  const handleDeleteTip = async () => {
+    try {
+      if (deleteId) {
+        await deleteTip(deleteId)
+        fetchDailyTip()
+        console.log("deleteid", deleteId);
+        toast.success("Tip deleted succesfully");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "something went wrong");
+    }finally{
+      setDeleteId("")
+    }
+  };
+
   if (loading) {
     return (
       <Loader color="black" isFullScreen={true} message="Fetching tips .." />
@@ -75,6 +102,17 @@ function page() {
         <h1 className="text-3xl font-bold text-center mb-8">Tips List</h1>
 
         <FormProvider {...methods}>
+          <DeleteConfirmation
+            description="Are you sure you want to delete this tip?"
+            title="Delete Tip"
+            onDelete={() => {
+              handleDeleteTip();
+            }}
+            setOpenAlert={setOpenAlert}
+            openAlert={openAlert}
+            onCancel={() => setDeleteId("")}
+          />
+
           <AddTipModal
             imagePreview={imagePreview}
             setImagePreview={setImagePreview}
@@ -91,7 +129,7 @@ function page() {
               {tipData.map((tip: TipModel, idx) => (
                 <TipCard
                   key={idx}
-                  onDelete={() => console.log("delete")}
+                  onDelete={(id: string) => handleDelete(id)}
                   onEdit={(tip: TipModel, imagePreview: string) =>
                     handleEdit(tip, imagePreview)
                   }
@@ -101,11 +139,9 @@ function page() {
             </div>
           ) : (
             <div className="min-h-[70vh] flex items-center justify-center">
-            <h2 className="text-lg ">No Tips Found ...</h2>
-          </div>
+              <h2 className="text-lg ">No Tips Found ...</h2>
+            </div>
           )}
-
-          
         </FormProvider>
       </div>
     </div>

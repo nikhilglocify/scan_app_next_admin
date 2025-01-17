@@ -31,7 +31,7 @@ const PasswordResetSchema: Schema<PasswordResetModel> = new Schema({
 
     }
 
-})
+}, { timestamps: true } )
 
 
  const PasswordReset:Model<PasswordResetModel>=mongoose.models.PasswordReset || model<PasswordResetModel>("PasswordReset",PasswordResetSchema)
