@@ -139,7 +139,7 @@ export async function GET(request: NextRequest) {
       return unauthorizedError(NextResponse, message || "Not Authorized")
     }
 
-    const tips = await Tip.find().sort({ date: 'desc' })
+    const tips = await Tip.find({isDeleted:false}).sort({ date: 'desc' })
 
 
     return successResponseWithData(NextResponse, "successfully fetched Tips", tips)
@@ -148,6 +148,40 @@ export async function GET(request: NextRequest) {
 
     return badRequest(NextResponse, error.message || "something went wrong")
 
+
+  }
+
+}
+
+
+
+export async function DELETE(request: NextRequest) {
+  try {
+    await connect()
+    const { user, success, message } = await authMiddleware(request)
+    const { searchParams } = request.nextUrl;
+    const id = searchParams.get('id')
+    
+
+    if (!success) {
+
+      return unauthorizedError(NextResponse, message || "Not Authorized")
+    }
+
+    if(!id){
+        return  badRequest(NextResponse, "id is required")
+    }
+    
+
+    
+    await Tip.findByIdAndUpdate(id, { isDeleted:true })
+
+
+
+    return successResponseWithData(NextResponse, "Tip edited succesfully")
+  } catch (error: any) {
+    console.log("error", error.message)
+    return badRequest(NextResponse, error.message || "error")
 
   }
 
