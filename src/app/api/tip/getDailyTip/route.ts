@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     if (!tip) {
       tip = await Tip.findOne({
-        date: { $lt: endOfDay },
+        date: { $lt: endOfDay },isDeleted:false
       }).sort({ date: 'desc', updatedAt: "desc", createdAt: "desc" }).lean();
 
 

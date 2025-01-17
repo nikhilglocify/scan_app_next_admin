@@ -41,7 +41,7 @@ const TipSchema: Schema<TipModel> = new Schema(
       ref: 'users'
     }
   },
-  { timestamps: true } // Adds `createdAt` and `updatedAt` fields
+  { timestamps: true } 
 );
 
 // Define the Mongoose model
