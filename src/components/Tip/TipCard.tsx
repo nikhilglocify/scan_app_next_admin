@@ -16,7 +16,7 @@ import Image from "next/image";
 type TipCardProps = {
   tip: TipModel;
   onEdit: (tip: TipModel, imagePreview: string) => void;
-  onDelete: () => void;
+  onDelete: (id:string) => void;
 };
 
 const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
@@ -62,7 +62,8 @@ const TipCard: React.FC<TipCardProps> = ({ tip, onEdit, onDelete }) => {
           <DropdownMenuItem onClick={() => onEdit(tip, blobURL)}>
             Edit
           </DropdownMenuItem>
-          {/* <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem> */}
+         {tip._id? <DropdownMenuItem onClick={()=>onDelete(tip._id!)} className="text-red-500">Delete</DropdownMenuItem>:""} 
+         
         </DropdownMenuContent>
       </DropdownMenu>
       <h2 className="py-2 px-3">Date: {new Date(tip.date).toDateString()}</h2>

@@ -48,6 +48,25 @@ export const editTip = async (data: any) => {
     }
 }
 
+export const deleteTip = async (id: string) => {
+    try {
+        const response = await axios.delete(`/api/tip?id=${id}`);
+        return response.data
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                throw new Error(error.response.data.message);
+            } else if (error.request) {
+                throw new Error("No response from server");
+            }
+        }
+        throw new Error("Request setup error");
+
+    }
+}
+
 
 export const getTips = async () => {
     try {
