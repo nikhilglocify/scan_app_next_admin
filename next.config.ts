@@ -6,10 +6,6 @@ const nextConfig: NextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-  env: {
-    AWS_REGION: '', // Do not expose AWS_REGION to the client
-  },
-  /* config options here */
 };
 
 export default nextConfig;
