@@ -28,7 +28,7 @@ export async function uploadFileToLocal(file: File, id: string) {
     
     const fileName = `${id}_${file.name}`;
     const filePath = path.join(uploadDir, fileName);
-    const relativePath = path.join("uploads", fileName); 
+    const relativePath = path.join("scan-app-uploads", fileName); 
   
     fs.mkdirSync(uploadDir, { recursive: true });
   
@@ -124,6 +124,5 @@ export async function uploadFileToLocal(file: File, id: string) {
   
   export function generateFileKey(uuid: string, fileName: string) {
   
-  
-    return `uploads/${uuid}_${fileName}`;
+    return `scan-app-uploads/${uuid}_${fileName}`;
   }
