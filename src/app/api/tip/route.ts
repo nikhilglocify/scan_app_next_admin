@@ -52,11 +52,7 @@ export async function POST(request: NextRequest) {
 
 
     if (image) {
-      // const file_key = generateFileKey(saveTip._id, "FileName")
-      // await store.set(file_key, image);
-      // console.log("filePath", file_key)
-      // const filePath = await uploadFileToLocal(image, saveTip._id)
-      // const file_key = await uploadFileToS3(image as any, saveTip._id)
+    
       const file_key = await uploadFileToAwsS3(image as any, saveTip._id)
 
       await Tip.findByIdAndUpdate(saveTip._id, { isImageUploaded: true, image: file_key })

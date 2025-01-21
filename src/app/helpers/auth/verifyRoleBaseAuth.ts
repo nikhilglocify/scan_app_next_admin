@@ -32,7 +32,6 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
         const session = await getServerSession(authOptions);
         const headersList = await headers()
         const appToken = headersList.get('appToken')
-        console.log("appToken",appToken,process.env.APP_TOKEN_SECRET)
         if(appToken==process.env.APP_TOKEN_SECRET){
             return {
                 success:true,

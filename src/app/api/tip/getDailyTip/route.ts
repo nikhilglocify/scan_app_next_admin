@@ -32,14 +32,8 @@ export async function GET(request: NextRequest) {
       tip = await Tip.findOne({
         date: { $lt: endOfDay },isDeleted:false
       }).sort({ date: 'desc', updatedAt: "desc", createdAt: "desc" }).lean();
-
-
-      console.log("No Tip for the day sending the last availabe")
       
     }
-
-    console.log("TIp Data",tip)
-
 
     return successResponseWithData(NextResponse, "successfully fetched Tips", tip||{})
 

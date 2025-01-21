@@ -85,7 +85,7 @@ export async function uploadFileToLocal(file: File, id: string) {
 
 
   export async function uploadFileToAwsS3(file: File, uuid: string) {
-    console.log("Running uploadFileToS3", { file, uuid });
+    
   
     const chunks: Uint8Array[] = [];
     const readableStream = file.stream();
@@ -112,7 +112,7 @@ export async function uploadFileToLocal(file: File, id: string) {
       // Upload file to S3
       const command = new PutObjectCommand(s3Params);
       await s3Client.send(command);
-      console.log(`File uploaded to S3: ${s3Params.Key}`);
+  
       return s3Params.Key;
     } catch (error) {
       console.error("Error uploading file to S3:", error);
