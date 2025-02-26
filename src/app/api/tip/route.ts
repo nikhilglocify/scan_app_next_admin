@@ -33,10 +33,10 @@ export async function POST(request: NextRequest) {
     }
 
 
-    // Check if valid files are received
-    if (!(image instanceof File)) {
-      return badRequest(NextResponse, "No valid files received")
-    }
+    // // Check if valid files are received
+    // if (!(image instanceof File)) {
+    //   return badRequest(NextResponse, "No valid files received")
+    // }
 
     const formBody: TipModel = JSON.parse(JSON.stringify(formPayload))
     console.log("formBody", formBody)
