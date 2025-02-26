@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
   // Redirect unauthenticated users to sign-in
   if (!token) {
     
-    const isBypassPath = bypassAuthPaths.some((path) => url.pathname.startsWith(path));
+    const isBypassPath = bypassAuthPaths.some((path) => url.pathname.startsWith(path) || url.pathname.startsWith('/loaderio'));
 
     if (!isBypassPath || isDisabledPath) {
       console.log('Redirecting to /sign-in');
