@@ -9,13 +9,14 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request});
-  console.log('Token:', token);
+ 
 
   const url = request.nextUrl;
+  console.log('Token:', token,url.pathname);
 
   // Define paths that bypass authentication
-  const bypassAuthPaths = ['/sign-in','/forgot-password','/reset-password'];
-  const disbaledPaths=['/sign-up']
+  const bypassAuthPaths = ['/sign-in','/forgot-password','/reset-password','/sign-up'];
+  const disbaledPaths=['sing']
   const isDisabledPath = disbaledPaths.some((path) => url.pathname.startsWith(path));
   
 

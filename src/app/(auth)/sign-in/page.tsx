@@ -106,7 +106,7 @@ const SignInForm: React.FC = () => {
       </button>
 
       {/*  "Don't have an account" section */}
-      {/* <div className="text-center mt-4">
+      <div className="text-center mt-4">
         <p className="text-sm text-gray-600">
           Don’t have an account?{" "}
           <Link
@@ -116,7 +116,7 @@ const SignInForm: React.FC = () => {
             Sign up
           </Link>
         </p>
-      </div> */}
+      </div>
 
       {/* Forgot password section */}
       <div className="text-center mt-4">
