@@ -14,6 +14,7 @@ import mongoose from "mongoose";
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("Running Post request")
 
     await connect()
     const { user, success, message } = await authMiddleware(request)
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     const formData = await request.formData();
+    console.log("formData",formData)
     let formPayload = Object.fromEntries(formData);
     const image = formData.get("image");
     const formValidationData: ReqBodyValidationresponse = validateBodyData(tipSchema, formPayload);
