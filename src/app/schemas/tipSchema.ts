@@ -19,7 +19,7 @@ export const tipSchema = z.object({
       {
         message: "Only valid image files (JPEG, PNG,JPG, WEBP) are allowed.",
       }
-    ),
+    ).optional(),
 
   date: z
   .union([z.string(), z.date()])
