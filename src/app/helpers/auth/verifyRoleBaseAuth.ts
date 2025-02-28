@@ -40,9 +40,10 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
         }
 
         if (!session?.user) {
+            console.log("No session user")
             return {
                 success: false,
-                message: "Not Authorized",
+                message: "Not Authorized++",
             };
         }
 
@@ -65,15 +66,16 @@ export async function authMiddleware(request: NextRequest): Promise<AuthResponse
                 }
             }
         }
+        
         return {
             success: false,
-            message: "Not Authorized",
+            message: "Not Authorized-",
         };
 
     } catch (error: any) {
         return {
             success: false,
-            message: error.message || "Not Authorized",
+            message: error.message || "Not Authorized:",
         };
     }
 }
