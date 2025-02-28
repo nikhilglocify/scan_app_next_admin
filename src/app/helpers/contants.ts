@@ -11,13 +11,13 @@ export const navBarFields: MenuItem[] = [
     showDropdown: false,
   },
   {
-    name: "Tips", route: "/tips/", dropdownOptions: [
+    name:"Items", route: "/tips/", dropdownOptions: [
 
 
     ], showDropdown: false
   },
   {
-    name: "Upload", route: "/upload-url/", dropdownOptions: [
+    name: "File", route: "/upload-url/", dropdownOptions: [
 
 
     ], showDropdown: false

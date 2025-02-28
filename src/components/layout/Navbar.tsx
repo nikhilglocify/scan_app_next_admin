@@ -48,13 +48,14 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className=" border-gray-200  bg-orange-500">
+    <nav className=" border-gray-200  bg-green-300">
       <div className="container flex flex-wrap items-center justify-between px-6 py-3 mx-auto">
         <Link
           href={"/"}
           className="self-center w-[150px] font-semibold whitespace-nowrap"
         >
-          <Image src={appLogo} alt="App Logo" />
+          Admin
+          {/* <Image src={appLogo} alt="App Logo" /> */}
           {/* FingerPrint Zero */}
         </Link>
         <button

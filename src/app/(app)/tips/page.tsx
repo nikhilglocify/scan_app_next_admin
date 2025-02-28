@@ -93,13 +93,13 @@ function page() {
 
   if (loading) {
     return (
-      <Loader color="black" isFullScreen={true} message="Fetching tips .." />
+      <Loader color="black" isFullScreen={true} message="Fetching  .." />
     );
   }
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="container mx-auto relative px-6">
-        <h1 className="text-3xl font-bold text-center mb-8">Tips List</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">Items List</h1>
 
         <FormProvider {...methods}>
           <DeleteConfirmation

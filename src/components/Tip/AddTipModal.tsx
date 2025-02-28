@@ -127,12 +127,12 @@ const AddTipModal: React.FC<AddTipModalProps> = ({
               resetForm();
             }}
           >
-            Add Tip
+            Add Item
           </Button>
         </DialogTrigger>
         <DialogContent className="mt-4">
           <DialogHeader>
-            <DialogTitle>{isEdit ? "Edit Tip" : "Add New Tip"}</DialogTitle>
+            <DialogTitle>{isEdit ? "Edit " : "Add"}</DialogTitle>
           </DialogHeader>
 
           {isLoadingApi ? (

@@ -69,7 +69,7 @@ const SignInForm: React.FC = () => {
           {...register("email")}
           className={`mt-1 block w-full px-3 py-2 border ${
             errors.email ? "border-red-500" : "border-gray-300"
-          } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm`}
+          } rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm`}
         />
         {errors.email && (
           <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
@@ -90,7 +90,7 @@ const SignInForm: React.FC = () => {
           {...register("password")}
           className={`mt-1 block w-full px-3 py-2 border ${
             errors.password ? "border-red-500" : "border-gray-300"
-          } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm`}
+          } rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm`}
         />
         {errors.password && (
           <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
@@ -100,7 +100,7 @@ const SignInForm: React.FC = () => {
       <button
         disabled={loading}
         type="submit"
-        className="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+        className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
       >
         {loading ? <Loader message={"Signing in ...."} /> : "Sign In"}
       </button>
@@ -111,7 +111,7 @@ const SignInForm: React.FC = () => {
           Don’t have an account?{" "}
           <Link
             href={routeConstants.SIGN_UP}
-            className="text-orange-600 hover:text-orange-500"
+            className="text-green-600 hover:text-green-500"
           >
             Sign up
           </Link>
@@ -124,7 +124,7 @@ const SignInForm: React.FC = () => {
           {/* Don’t have an account?{" "} */}
           <Link
             href={routeConstants.FORGOT_PASSWORD}
-            className="text-orange-600 hover:text-orange-500"
+            className="text-green-600 hover:text-green-500"
           >
             Forgotten Password?
           </Link>

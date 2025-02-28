@@ -53,7 +53,7 @@ const SignupForm: React.FC = () => {
           {...register("name")}
           className={`mt-1 block w-full px-3 py-2 border ${
             errors.name ? "border-red-500" : "border-gray-300"
-          } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm`}
+          } rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm`}
         />
         {errors.name && (
           <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
@@ -72,7 +72,7 @@ const SignupForm: React.FC = () => {
           {...register("email")}
           className={`mt-1 block w-full px-3 py-2 border ${
             errors.email ? "border-red-500" : "border-gray-300"
-          } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm`}
+          } rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm`}
         />
         {errors.email && (
           <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
@@ -92,7 +92,7 @@ const SignupForm: React.FC = () => {
           {...register("password")}
           className={`mt-1 block w-full px-3 py-2 border ${
             errors.password ? "border-red-500" : "border-gray-300"
-          } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm`}
+          } rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm`}
         />
         {errors.password && (
           <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
@@ -101,7 +101,7 @@ const SignupForm: React.FC = () => {
 
       <button
         type="submit"
-        className="w-full bg-orange-600 text-white py-2 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+        className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
       >
         Sign Up
       </button>
@@ -111,7 +111,7 @@ const SignupForm: React.FC = () => {
           Already have an account?{" "}
           <Link
             href={routeConstants.SIGN_IN}
-            className="text-orange-600 hover:text-orange-500"
+            className="text-green-600 hover:text-green-500"
           >
             Sign In
           </Link>

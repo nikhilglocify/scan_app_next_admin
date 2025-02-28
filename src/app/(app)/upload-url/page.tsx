@@ -40,12 +40,12 @@ export default function UploadJson() {
         type="file"
         accept="application/json"
         onChange={handleFileChange}
-        className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+        className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
       />
       <button
         onClick={uploadFile}
         disabled={uploading}
-        className="w-full p-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-orange-500"
+        className="w-full p-2 text-white bg-green-500 rounded-md hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500"
       >
         {uploading ? "Uploading..." : "Upload"}
       </button>
